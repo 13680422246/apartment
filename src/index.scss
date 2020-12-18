@@ -1,0 +1,24 @@
+/*
+公寓系统的全局css
+*/
+// 屏幕全屏显式
+html,
+body,
+#root {
+	height: 100%;
+}
+// 居中
+.position-center {
+	position: absolute !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+}
+// 白色文本
+.text {
+	color: white !important;
+}
+// 文本居中
+.text-align {
+	text-align: center;
+}

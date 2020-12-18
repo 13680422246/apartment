@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './index.scss'; // 全局css
+import 'antd/dist/antd.css'; // antd css
+import Router from './router'; // 路由
+// redux
+import { Provider } from 'react-redux';
+import { store, persistedStore } from './store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+	<Provider store={store}>
+		<PersistGate loading={null} persistor={persistedStore}>
+			<Router />
+		</PersistGate>
+	</Provider>,
+	document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
