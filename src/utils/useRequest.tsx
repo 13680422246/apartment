@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import { baseURL } from '../config';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { store } from '../store';
 import { Hint, HintOptions } from '../components';
 import Qs from 'qs';
@@ -50,6 +50,10 @@ function useRequest<ResDataType, ParamsType>(
 	const runing = useRef<boolean>(false); // 是否正在运行
 	const source = Axios.CancelToken.source();
 
+	/**
+	 * 组件结束的时候
+	 * 取消请求，设置runing = false-防止内存泄漏
+	 */
 	useEffect(() => {
 		return () => {
 			if (runing.current) {
@@ -59,48 +63,58 @@ function useRequest<ResDataType, ParamsType>(
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-	const run = (params: ParamsType) => {
-		runing.current = true; // 设置为可以运行
-		setLoading(true); // 加载中
-		proxy
-			.post(url, params, {
-				cancelToken: source.token,
-			})
-			.then((res) => {
-				/**
-				 * 转换数据
-				 */
-				if (res.status !== 200) {
-					throw new Error('请求错误');
-				}
-				return res.data;
-			})
-			.then((data: ResDataType) => {
-				if (runing.current) {
+	/**
+	 * 传递参数，发送请求
+	 * @param params POST参数
+	 */
+	const run = useCallback(
+		(params: ParamsType) => {
+			runing.current = true; // 设置为可以运行
+			setLoading(true); // 加载中
+			proxy
+				.post(url, params, {
+					cancelToken: source.token,
+				})
+				.then((res) => {
 					/**
-					 * 处理请求成功
+					 * 转换数据
 					 */
-					setLoading(false);
-					setData(data);
-					if (options.onSuccess) {
-						options.onSuccess({
-							data,
-							params,
-							Hint,
-						});
+					if (res.status !== 200) {
+						throw new Error('请求错误');
 					}
-				}
-			})
-			.catch((err: Error) => {
-				/**
-				 * 处理请求失败
-				 */
-				if (runing.current) {
-					setLoading(false);
-					setError(err);
-				}
-			});
-	};
+					return res.data;
+				})
+				.then((data: ResDataType) => {
+					if (runing.current) {
+						/**
+						 * 处理请求成功
+						 */
+						setLoading(false);
+						setData(data);
+						if (options.onSuccess) {
+							options.onSuccess({
+								data,
+								params,
+								Hint,
+							});
+						}
+					}
+				})
+				.catch((err: Error) => {
+					/**
+					 * 处理请求失败
+					 */
+					if (runing.current) {
+						setLoading(false);
+						setError(err);
+					}
+				});
+		},
+		[options, source.token, url]
+	);
+	/**
+	 * 停止请求，运行run也不会发送请求
+	 */
 	return {
 		loading,
 		data,

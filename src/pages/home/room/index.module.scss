@@ -1,0 +1,33 @@
+.container {
+	background-color: white;
+}
+// 图像区域
+.img {
+	text-align: center;
+	background-color: black;
+}
+// 头部区域 - 图像以下，分割线以上
+.header {
+	text-align: center;
+	.price {
+		font-size: 1.5rem;
+	}
+}
+// 中间的居中 -- 俩条分割线中间
+.infoContainer {
+	display: flex;
+	justify-content: space-around;
+	text-align: center;
+}
+// 标签
+.tags {
+	width: 80%;
+	margin: auto;
+}
+// 加载中
+.loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}

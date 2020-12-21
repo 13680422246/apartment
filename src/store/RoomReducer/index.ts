@@ -13,14 +13,14 @@ const defaultState: RoomState = {
 	// 租金数据
 	price: {
 		title: '租金',
-		min: 0,
-		max: 0,
+		min: undefined,
+		max: undefined,
 	},
 	// 面积数据
 	area: {
 		title: '面积',
-		min: 0,
-		max: 0,
+		min: undefined,
+		max: undefined,
 	},
 	// 朝向
 	dir: {

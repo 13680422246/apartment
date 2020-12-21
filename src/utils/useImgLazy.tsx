@@ -13,6 +13,7 @@ const useImgLazy = (selector: string, root: HTMLElement | null = null) => {
 			observer = new IntersectionObserver(
 				(changes) => {
 					for (const change of changes) {
+						console.info(change);
 						if (change.isIntersecting) {
 							// 加载图片
 							const { target } = change;
@@ -35,7 +36,14 @@ const useImgLazy = (selector: string, root: HTMLElement | null = null) => {
 			});
 		}
 		return () => {
-			observer.disconnect(); // 关闭观察，防止内存泄漏
+			if (observer) {
+				if (nodes && nodes.length) {
+					nodes.forEach((node) => {
+						observer.unobserve(node);
+					});
+				}
+				observer.disconnect(); // 关闭观察，防止内存泄漏
+			}
 		};
 	}, [selector, root]);
 };

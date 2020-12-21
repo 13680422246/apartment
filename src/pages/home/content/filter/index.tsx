@@ -36,7 +36,7 @@ const Filter: React.FC<{}> = (props) => {
 		}
 		tabKeyChange(key);
 	};
-	// close tab
+	// close tab - 重新请求数据
 	const colseTab = () => {
 		close(); // close tab
 		modalRef.current?.closeModal(); // close modal

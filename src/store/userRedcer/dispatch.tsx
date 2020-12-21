@@ -37,7 +37,7 @@ export const useUserDispatch = () => {
 						token: '',
 						roleid: '',
 						username: '',
-						permission: '',
+						permission: [],
 					},
 				],
 			});
