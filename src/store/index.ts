@@ -5,10 +5,13 @@ import storage from 'redux-persist/lib/storage'; // 默认web的localStorage
 // reducer
 import RoomReducer from './RoomReducer';
 import { RoomState } from './RoomReducer/interface';
+import userRedcer from './userRedcer';
+import { UserState } from './userRedcer/interface';
 
 // 合并reducer
-const reducer = combineReducers({
+const reducer = combineReducers<IStore>({
 	room: RoomReducer,
+	user: userRedcer,
 });
 // 持久化存储reducer
 const persistedReducer = persistReducer(
@@ -21,6 +24,7 @@ const persistedReducer = persistReducer(
 );
 export interface IStore {
 	room: RoomState;
+	user: UserState;
 }
 export const store: Store<IStore> = createStore(persistedReducer);
 export const persistedStore = persistStore(store);
