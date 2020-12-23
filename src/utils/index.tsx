@@ -5,3 +5,4 @@ export { default as useCheckCodeURL } from './useCheckCodeURL';
 export { default as useModal } from './useModal';
 export { default as useScrollLoader } from './useScrollLoader';
 export { default as useTitle } from './useTitle';
+export { default as useChart } from './useChart';

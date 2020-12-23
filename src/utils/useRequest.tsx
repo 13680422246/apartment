@@ -42,6 +42,10 @@ function useRequest<ResDataType, ParamsType>(
 			params?: ParamsType;
 			Hint: (options: HintOptions) => void;
 		}) => void;
+		onError?: (res: {
+			error: Error;
+			Hint: (options: HintOptions) => void;
+		}) => void;
 	}
 ) {
 	const [loading, setLoading] = useState<boolean>(false); // 加载中
@@ -107,6 +111,12 @@ function useRequest<ResDataType, ParamsType>(
 					if (runing.current) {
 						setLoading(false);
 						setError(err);
+						if (options.onError) {
+							options.onError({
+								error: err,
+								Hint,
+							});
+						}
 					}
 				});
 		},

@@ -7,11 +7,14 @@ import RoomReducer from './RoomReducer';
 import { RoomState } from './RoomReducer/interface';
 import userRedcer from './userRedcer';
 import { UserState } from './userRedcer/interface';
+import TableFormReducer from './TableFormReducer';
+import { TableFormInterface } from './TableFormReducer/interface';
 
 // 合并reducer
 const reducer = combineReducers<IStore>({
 	room: RoomReducer,
 	user: userRedcer,
+	tableForm: TableFormReducer,
 });
 // 持久化存储reducer
 const persistedReducer = persistReducer(
@@ -25,6 +28,7 @@ const persistedReducer = persistReducer(
 export interface IStore {
 	room: RoomState;
 	user: UserState;
+	tableForm: TableFormInterface;
 }
 export const store: Store<IStore> = createStore(persistedReducer);
 export const persistedStore = persistStore(store);

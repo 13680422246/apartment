@@ -1,7 +1,7 @@
-import React, { memo, useLayoutEffect, useState } from 'react';
+import React, { memo, useEffect, useLayoutEffect, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import icons from './routers';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useRequest } from '../../../utils';
 
 interface ISideItem {
@@ -13,10 +13,11 @@ interface ISideItem {
 interface IPros {}
 const defaultProps = {};
 const SideBar: React.FC<IPros> = (props) => {
+	const location = useLocation();
 	/**
 	 * 请求我的权限列表，渲染侧边栏
 	 */
-	const [side, setSide] = useState<ISideItem[]>([]);
+	const [side, setSide] = useState<ISideItem[]>([]); // 侧边栏
 	const { run } = useRequest<
 		{
 			id: number;
@@ -41,13 +42,24 @@ const SideBar: React.FC<IPros> = (props) => {
 			setSide(side);
 		},
 	});
+	/**
+	 * 监听side、location的改变
+	 */
+	const [index, setIndex] = useState<[string]>(['']);
+	useEffect(() => {
+		const { pathname } = location;
+		const index = side
+			.findIndex((item) => item.url === pathname)
+			.toString();
+		setIndex([index]);
+	}, [side, location]);
 	useLayoutEffect(() => {
 		run({});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return (
 		<Layout.Sider collapsible breakpoint='lg'>
-			<Menu theme='dark' mode='inline'>
+			<Menu theme='dark' mode='inline' selectedKeys={index}>
 				{side.map((item, index) => (
 					<Menu.Item key={index} icon={item.icon}>
 						<NavLink to={item.url}>{item.title}</NavLink>
