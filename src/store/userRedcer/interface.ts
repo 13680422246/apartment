@@ -2,5 +2,9 @@ export interface UserState {
 	token: string;
 	roleid: string;
 	username: string;
-	permission: any[];
+	permission: {
+		id: string;
+		name: string;
+		url: string;
+	}[];
 }

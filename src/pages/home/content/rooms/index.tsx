@@ -5,6 +5,7 @@ import { useRoomStore } from '../../../../store/RoomReducer/dispatch';
 import { Spin, Empty, BackTop } from 'antd';
 import style from './index.module.scss';
 import { defaultPageSize } from '../../../../config';
+import { FrownOutlined } from '@ant-design/icons';
 
 interface PostDataType {
 	current: number;
@@ -36,24 +37,24 @@ const Rooms: React.FC<IPros> = (props) => {
 	/**
 	 * 实现加载数据
 	 */
-	const { run: temprun } = useRequest<ResDataType, PostDataType>(
-		'/home/room/findAll',
-		{
-			onSuccess: ({ data }) => {
-				setHasNextPage(data.hasNextPage);
-				setCurrentPage(data.pageNum);
-				setData((source) => {
-					const newData = [];
-					// 判断是否为第一页
-					if (data.pageNum !== 1) {
-						newData.push(...source);
-					}
-					newData.push(...data.list);
-					return newData;
-				});
-			},
-		}
-	);
+	const { run: temprun, error, loading } = useRequest<
+		ResDataType,
+		PostDataType
+	>('/home/room/findAll', {
+		onSuccess: ({ data }) => {
+			setHasNextPage(data.hasNextPage);
+			setCurrentPage(data.pageNum);
+			setData((source) => {
+				const newData = [];
+				// 判断是否为第一页
+				if (data.pageNum !== 1) {
+					newData.push(...source);
+				}
+				newData.push(...data.list);
+				return newData;
+			});
+		},
+	});
 	// 主要用于处理参数
 	const run = (currentPage: number) => {
 		temprun({
@@ -86,6 +87,39 @@ const Rooms: React.FC<IPros> = (props) => {
 		run(1); // 页数重新更新
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [store.price, store.area, store.dir.content]);
+
+	/**
+	 * 显示底部组件
+	 */
+	const LoadingComponent = <Spin className={style.loadMore} size='large' />;
+	const showFooter = () => {
+		// 存在错误
+		if (error !== undefined) {
+			return (
+				<Empty
+					image={
+						<FrownOutlined
+							style={{
+								fontSize: '96px',
+							}}
+						/>
+					}
+					description={error.message}
+				/>
+			);
+		}
+		// 加载数据ing
+		else if (loading === true) {
+			return LoadingComponent;
+		}
+		// 没有错误 + 加载完毕
+		// 如果还有下一页
+		else if (hasNextPage) {
+			return LoadingComponent;
+		} else {
+			return <Empty description='没有数据了' />;
+		}
+	};
 	return (
 		<>
 			<BackTop />
@@ -101,11 +135,7 @@ const Rooms: React.FC<IPros> = (props) => {
 					style={{
 						height: '300px',
 					}}>
-					{hasNextPage ? (
-						<Spin className={style.loadMore} size='large' />
-					) : (
-						<Empty description='没有数据了' />
-					)}
+					{showFooter()}
 				</div>
 			</div>
 		</>

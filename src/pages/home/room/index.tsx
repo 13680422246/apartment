@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Room as RoomType } from '../../../components';
-import { useRequest } from '../../../utils';
+import { useRequest, useTitle } from '../../../utils';
 import { Image, Divider, Tag, Grid, Typography } from 'antd';
 import style from './index.module.scss';
 import { baseURL } from '../../../config';
@@ -50,7 +50,6 @@ const RoomComponent: React.FC<IPros> = (props) => {
 		{}
 	>(`/home/room/${params.id}`, {
 		onSuccess: ({ data, params }) => {
-			console.info(JSON.parse(data.msg));
 			setRoom(JSON.parse(data.msg));
 		},
 	});
@@ -61,6 +60,11 @@ const RoomComponent: React.FC<IPros> = (props) => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [state]);
+
+	/**
+	 * 修改标题
+	 */
+	useTitle(room !== undefined ? room.name : '');
 
 	return (
 		<div className={style.container}>

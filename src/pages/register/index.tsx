@@ -6,7 +6,7 @@ import {
 	useLoginGoBack,
 	useUserDispatch,
 } from '../../store/userRedcer/dispatch';
-import { useRequest } from '../../utils';
+import { useRequest, useTitle } from '../../utils';
 
 interface PostData {
 	username: string;
@@ -22,6 +22,7 @@ interface ResData {
 const Login: React.FC = () => {
 	const dispatch = useUserDispatch();
 
+	useTitle('注册'); // 修改title
 	useLoginGoBack(); // 用户登录之后 go back
 
 	// 发送注册请求
@@ -59,7 +60,7 @@ const Login: React.FC = () => {
 				transform: 'translate(-50%,10px)',
 			}}>
 			<Col>
-				<p className='text-align'>注册</p>
+				<p className='text-align'>公寓管理系统-注册</p>
 				<Form name='login' onFinish={requestRegister}>
 					<UsernameItem />
 					<PwdItem />

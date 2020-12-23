@@ -5,10 +5,9 @@ import {
 	useUserStore,
 	useUserDispatch,
 } from '../../../store/userRedcer/dispatch';
+import Logo from './Logo';
 
-interface Ipros {
-	title: string;
-}
+interface Ipros {}
 
 function MyDivider() {
 	return (
@@ -34,7 +33,7 @@ const Header: React.FC<Ipros> = (props) => {
 		<Row justify='space-between'>
 			<Col>
 				<NavLink to='' className='text'>
-					{props.title}
+					<Logo title='公寓管理系统' icon='logo' />
 				</NavLink>
 			</Col>
 			<Col>

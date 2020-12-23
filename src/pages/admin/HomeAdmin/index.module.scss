@@ -1,0 +1,15 @@
+.block {
+	width: 90%;
+	height: calc(100% - 100px);
+	margin: 0 auto;
+	background-color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.footer {
+	text-align: center;
+	line-height: 100px;
+	display: flex;
+	justify-content: center;
+}

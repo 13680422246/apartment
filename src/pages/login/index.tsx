@@ -3,7 +3,7 @@ import { Button, Col, Form, Row } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { CaptchaItem, PwdItem, UsernameItem } from '../../components';
 import style from './index.module.scss';
-import { useRequest } from '../../utils';
+import { useRequest, useTitle } from '../../utils';
 import {
 	useUserDispatch,
 	useLoginGoBack,
@@ -23,6 +23,7 @@ interface ResData {
 const Login: React.FC = () => {
 	const dispatch = useUserDispatch();
 
+	useTitle('登录'); // 修改title
 	useLoginGoBack(); // 登录之后go back
 
 	// 发送登录请求
@@ -51,7 +52,7 @@ const Login: React.FC = () => {
 	return (
 		<Row justify='center' className={style.container}>
 			<Col>
-				<p className='text-align'>公寓管理系统-登录界面</p>
+				<p className='text-align'>公寓管理系统-登录</p>
 				<Form name='login' onFinish={requestLogin}>
 					<UsernameItem />
 					<PwdItem />
