@@ -1,22 +1,28 @@
-import React, { memo } from 'react';
+import React, { memo, useContext } from 'react';
 import { Popconfirm } from 'antd';
 import { NavLink } from 'react-router-dom';
+import { TableFormContext } from '../Provider';
 
 const Delete: React.FC<{
 	record: any;
 	handleDelete?: Function;
 }> = memo((props) => {
+	const { state } = useContext(TableFormContext);
+	/**
+	 * 处理删除事件
+	 */
 	const handleDelete = (row: any) => {};
 	return (
 		<Popconfirm
-			title='Sure to delete?'
+			disabled={state.editingKey !== ''}
+			title='确定删除?'
 			onConfirm={() => handleDelete(props.record)}>
 			<NavLink
 				to='#'
 				onClick={(e) => {
 					e.preventDefault();
 				}}>
-				Delete
+				删除
 			</NavLink>
 		</Popconfirm>
 	);

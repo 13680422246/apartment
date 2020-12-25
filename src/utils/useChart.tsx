@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import echarts from 'echarts';
-import { EChartsOption } from 'echarts/types/dist/echarts';
+import { EChartsOption } from 'echarts';
+const echarts = require('echarts');
 
 function useChart(
 	dom: string | React.RefObject<HTMLElement>,

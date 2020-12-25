@@ -3,15 +3,21 @@ import { Layout, Spin } from 'antd';
 import { Route, Switch } from 'react-router-dom';
 import SideBar from './SideBar';
 import MyHeader from './Header';
+import { useNotAdminThenGoBack } from '../../store/userRedcer/dispatch';
 const { Header, Content } = Layout;
 
 const Role = lazy(() => import('./Role'));
 const HomeAdmin = lazy(() => import('./HomeAdmin'));
 const Chart = lazy(() => import('./Chart'));
 const Test = lazy(() => import('./Test'));
+const NotFount = lazy(() => import('../status/404'));
 
 interface IPros {}
 const Admin: React.FC<IPros> = (props) => {
+	/**
+	 * 判断用户是否具有权限
+	 */
+	useNotAdminThenGoBack();
 	return (
 		<Layout
 			style={{
@@ -35,7 +41,11 @@ const Admin: React.FC<IPros> = (props) => {
 								exact
 							/>
 							<Route path='/admin/test' component={Test} exact />
-							<Route path='/admin/' component={HomeAdmin} />
+							<Route path='/admin/' component={HomeAdmin} exact />
+							<Route
+								path='/admin'
+								render={() => <NotFount url='/admin' />}
+							/>
 						</Switch>
 					</Suspense>
 				</Content>

@@ -1,17 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CommonCard from '../components/CommonCard';
-import { useChart } from '@/utils/hooks';
-import { POST } from '@/utils/proxy';
+import { useChart, useRequest } from '../../../../../utils';
 import moment from 'moment';
 
 const Subscribe = () => {
-	const chartDom = useRef();
-	const [loading, setLoading] = useState(false);
-	const [xAxis, setXAxis] = useState([]);
-	const [success, setSuccess] = useState([]);
-	const [cancel, setCancel] = useState([]);
-	const [miss, setMiss] = useState([]);
+	const chartDom = useRef<HTMLDivElement>(null);
+	const [xAxis, setXAxis] = useState<string[]>([]);
+	const [success, setSuccess] = useState<string[]>([]);
+	const [cancel, setCancel] = useState<string[]>([]);
+	const [miss, setMiss] = useState<string[]>([]);
 
+	/**
+	 * 图表展示
+	 */
 	useChart(
 		chartDom,
 		{
@@ -75,7 +76,7 @@ const Subscribe = () => {
 					// 坐标轴指示器，坐标轴触发有效
 					type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
 				},
-				formatter: function (params) {
+				formatter: function (params: any) {
 					var tar1 = params[0];
 					var tar2 = params[1];
 					var tar3 = params[2];
@@ -100,61 +101,78 @@ const Subscribe = () => {
 		[success, cancel, miss]
 	);
 
+	/**
+	 * 加载数据
+	 */
+	interface ResDataType {
+		date: string;
+		num: string;
+	}
+	const { loading, run } = useRequest<
+		{
+			success: ResDataType[];
+			cancel: ResDataType[];
+			miss: ResDataType[];
+		},
+		{
+			startTime: String;
+			endTime: String;
+		}
+	>('/admin/chart/findSubscribe', {
+		onSuccess: ({ data }) => {
+			const newData: {
+				[propname: string]: {
+					success?: string;
+					cancel?: string;
+					miss?: string;
+				};
+			} = {};
+			for (const item of data.success) {
+				if (newData[item.date] === undefined) newData[item.date] = {};
+				newData[item.date]['success'] = item.num;
+			}
+			for (const item of data.cancel) {
+				if (newData[item.date] === undefined) newData[item.date] = {};
+				newData[item.date]['cancel'] = item.num;
+			}
+			for (const item of data.miss) {
+				if (newData[item.date] === undefined) newData[item.date] = {};
+				newData[item.date]['miss'] = item.num;
+			}
+			const success: string[] = [];
+			const cancel: string[] = [];
+			const miss: string[] = [];
+			for (const item of Object.values(newData)) {
+				if (item.success) success.push(item.success);
+				else success.push('0');
+				if (item.cancel) cancel.push(item.cancel);
+				else cancel.push('0');
+				if (item.miss) miss.push(item.miss);
+				else miss.push('0');
+			}
+			setXAxis(Object.keys(newData));
+			setSuccess(success);
+			setCancel(cancel);
+			setMiss(miss);
+		},
+	});
+
 	// 第一次加载数据
 	useEffect(() => {
 		const year = moment(new Date()).format('YYYY');
-		fetch(`${year}-01`, `${year}-12`);
+		run({
+			startTime: `${year}-01`,
+			endTime: `${year}-12`,
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// 请求数据
-	const fetch = (startTime, endTime) => {
-		setLoading(true);
-		POST(
-			'/admin/chart/findSubscribe',
-			{
-				startTime,
-				endTime,
-			},
-			(data) => {
-				const newData = {};
-				for (const item of data.success) {
-					if (newData[item.date] == undefined)
-						newData[item.date] = {};
-					newData[item.date]['success'] = item.num;
-				}
-				for (const item of data.cancel) {
-					if (newData[item.date] == undefined)
-						newData[item.date] = {};
-					newData[item.date]['cancel'] = item.num;
-				}
-				for (const item of data.miss) {
-					if (newData[item.date] == undefined)
-						newData[item.date] = {};
-					newData[item.date]['miss'] = item.num;
-				}
-				const success = [];
-				const cancel = [];
-				const miss = [];
-				for (const item of Object.values(newData)) {
-					if (item.success) success.push(item.success);
-					else success.push(0);
-					if (item.cancel) cancel.push(item.cancel);
-					else cancel.push(0);
-					if (item.miss) miss.push(item.miss);
-					else miss.push(0);
-				}
-				setLoading(false);
-				setXAxis(Object.keys(newData));
-				setSuccess(success);
-				setCancel(cancel);
-				setMiss(miss);
-			}
-		);
-	};
-
 	// 处理日期的改变
-	const handleChange = (startTime, endTime) => {
-		fetch(startTime, endTime);
+	const handleChange = (startTime: string, endTime: string) => {
+		run({
+			startTime,
+			endTime,
+		});
 	};
 	return (
 		<CommonCard

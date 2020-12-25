@@ -12,7 +12,7 @@ const columns = [
 		],
 		sorter: {
 			compare: (a, b) => a.rolename.localeCompare(b.rolename),
-			multiple: 3,
+			multiple: 2,
 		},
 		search: true,
 	},
@@ -23,7 +23,7 @@ const columns = [
 		editable: true,
 		sorter: {
 			compare: (a, b) => a.rolename.localeCompare(b.rolename),
-			multiple: 3,
+			multiple: 1,
 		},
 		search: true,
 	},

@@ -1,14 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import CommonCard from '../components/CommonCard';
-import { useChart } from '@/utils/hooks';
-import { POST } from '@/utils/proxy';
+import { useChart, useRequest } from '../../../../../utils';
 import moment from 'moment';
 
 const Maintain = () => {
-	const chartDom = useRef();
-	const [loading, setLoading] = useState(false);
-	const [xAxis, setXAxis] = useState([]);
-	const [data, setData] = useState([]);
+	const chartDom = useRef<HTMLDivElement>(null);
+	const [xAxis, setXAxis] = useState<string[]>([]);
+	const [data, setData] = useState<string[]>([]);
 
 	useChart(
 		chartDom,
@@ -55,7 +53,7 @@ const Maintain = () => {
 					// 坐标轴指示器，坐标轴触发有效
 					type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
 				},
-				formatter: function (params) {
+				formatter: function (params: any) {
 					var tar = params[0];
 					return (
 						tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value
@@ -66,37 +64,48 @@ const Maintain = () => {
 		[data]
 	);
 
+	const { loading, run } = useRequest<
+		{
+			date: string;
+			price: string;
+		}[],
+		{
+			startTime: String;
+			endTime: String;
+		}
+	>('/admin/chart/findMaintain', {
+		onSuccess: ({ data }) => {
+			// eg. item: {date: '2020-12',price: 150}
+			const newData: {
+				[propname: string]: string;
+			} = {};
+			for (const item of data) {
+				newData[item.date] = item.price;
+			}
+			setXAxis(Object.keys(newData));
+			setData(Object.values(newData));
+		},
+	});
 	// 第一次加载数据
 	useEffect(() => {
 		const year = moment(new Date()).format('YYYY');
-		fetch(`${year}-01`, `${year}-12`);
+		run({
+			startTime: `${year}-01`,
+			endTime: `${year}-12`,
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// 请求数据
-	const fetch = (startTime, endTime) => {
-		setLoading(true);
-		POST(
-			'/admin/chart/findMaintain',
-			{
-				startTime,
-				endTime,
-			},
-			(data) => {
-				// eg. item: {date: '2020-12',price: 150}
-				const newData = {};
-				for (const item of data) {
-					newData[item.date] = item.price;
-				}
-				setLoading(false);
-				setXAxis(Object.keys(newData));
-				setData(Object.values(newData));
-			}
-		);
-	};
-
-	// 处理日期的改变
-	const handleChange = (startTime, endTime) => {
-		fetch(startTime, endTime);
+	/**
+	 * 处理日期的改变
+	 * @param startTime string ; 开始日期
+	 * @param endTime string ; 结束日期
+	 */
+	const handleChange = (startTime: string, endTime: string) => {
+		run({
+			startTime,
+			endTime,
+		});
 	};
 	return (
 		<CommonCard
