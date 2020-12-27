@@ -31,38 +31,45 @@ const proxy = Axios.create({
  * 手动触发请求
  * 实现防抖测率、实现节流策略
  * @param url 请求地址，已经存在base url
- * @param params POST参数
- * @param confg 配置文件
+ * @param options 配置文件
+ * @returns { run,loading,data,error }
  */
 function useRequest<ResDataType, ParamsType>(
 	url: string,
 	options: {
+		// 成功回调
 		onSuccess?: (res: {
 			data: ResDataType;
 			params?: ParamsType;
 			Hint: (options: HintOptions) => void;
+			values?: {
+				[propsname: string]: any;
+			};
 		}) => void;
+		// 失败回调
 		onError?: (res: {
 			error: Error;
 			Hint: (options: HintOptions) => void;
 		}) => void;
-	}
+		// 配置项
+		options?: {};
+	} = {}
 ) {
 	const [loading, setLoading] = useState<boolean>(false); // 加载中
 	const [error, setError] = useState<Error>(); // 错误信息
 	const [data, setData] = useState<ResDataType>(); // 请求返回的数据
 	const runing = useRef<boolean>(false); // 是否正在运行
-	const source = Axios.CancelToken.source();
+	const source = Axios.CancelToken.source(); // 取消axios请求
 
 	/**
 	 * 组件结束的时候
 	 * 取消请求，设置runing = false-防止内存泄漏
 	 */
 	useEffect(() => {
+		runing.current = true;
 		return () => {
 			if (runing.current) {
 				runing.current = false;
-				source.cancel();
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,12 +77,18 @@ function useRequest<ResDataType, ParamsType>(
 	/**
 	 * 传递参数，发送请求
 	 * @param params POST参数
+	 * @param values 传递给onSuccess的额外参数
 	 */
 	const run = useCallback(
-		(params: ParamsType) => {
+		(
+			params: ParamsType,
+			values?: {
+				[propsname: string]: any;
+			}
+		) => {
 			runing.current = true; // 设置为可以运行
 			setLoading(true); // 加载中
-			proxy
+			return proxy
 				.post(url, params, {
 					cancelToken: source.token,
 				})
@@ -100,6 +113,7 @@ function useRequest<ResDataType, ParamsType>(
 								data,
 								params,
 								Hint,
+								values,
 							});
 						}
 					}

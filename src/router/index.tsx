@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import { Spin } from 'antd';
 
+import Test from '../pages/Test';
 const Home = lazy(() => import('../pages/home'));
 const Admin = lazy(() => import('../pages/admin'));
 
@@ -9,6 +10,7 @@ const Router: React.FC = () => {
 	return (
 		<HashRouter>
 			<Switch>
+				<Route path='/test' component={Test} exact></Route>
 				<Route path='/admin'>
 					<Suspense
 						fallback={

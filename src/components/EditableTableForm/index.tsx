@@ -1,9 +1,9 @@
-import React, { memo, useCallback, useEffect, useContext } from 'react';
+import React, { memo, useEffect, useContext } from 'react';
 import { Button, Form, Space, Table } from 'antd';
 import { useRequest } from '../../utils';
 import EditableCell from './render/EditableCell';
 import { TableFormContext, TableFormContextProvider } from './Provider';
-import renderDelete from './render/renderDelete';
+import renderPopconfirm from './render/renderPopconfirm';
 import renderEdit from './render/renderEdit';
 import renderSearch from './render/renderSearch';
 import parseParams from './parseParams';
@@ -20,15 +20,14 @@ interface IPros {
 	// 默认每页显示的数量
 	defaultPageSize?: number;
 	// 请求的基本URL
-	BaseUrl: string;
+	fetchUrl: string;
 	// 描述列对象
 	columns: any[];
 	// 处理请求的数据
-	handleFetchData: Function;
-	// 处理编辑的数据
-	handleSave?: Function;
-	// 处理删除的数据
-	handleDelete?: Function;
+	handleFetchData: (params: {
+		datasource: any[];
+		emit: (datasource: any[]) => void;
+	}) => void;
 	// 顶部显示
 	modal?: React.ReactNode;
 }
@@ -36,9 +35,9 @@ const EditableTableForm: React.FC<IPros> = memo(
 	(props) => {
 		const { state, dispatch, form } = useContext(TableFormContext);
 		/**
-		 * 请求数据
+		 * 加载数据
 		 */
-		const { loading, run } = useRequest<
+		const { loading: requestLoading, run } = useRequest<
 			PageInfo,
 			{
 				current: number;
@@ -51,7 +50,7 @@ const EditableTableForm: React.FC<IPros> = memo(
 					order: string;
 				}[];
 			}
-		>(`${props.BaseUrl}/findAll`, {
+		>(props.fetchUrl, {
 			onSuccess: ({ data }) => {
 				if (dispatch) {
 					dispatch({
@@ -64,9 +63,15 @@ const EditableTableForm: React.FC<IPros> = memo(
 							},
 						],
 					});
-					dispatch({
-						type: 'data',
-						args: [data.list],
+
+					props.handleFetchData({
+						datasource: data.list,
+						emit: (datasource) => {
+							dispatch({
+								type: 'data',
+								args: [datasource],
+							});
+						},
 					});
 				}
 			},
@@ -116,21 +121,17 @@ const EditableTableForm: React.FC<IPros> = memo(
 					args: [filters, sorter],
 				});
 				// 重新请求数据
-				run(parseParams(pagination, filters, sorter));
+				// 注意: 将defaultPageSize恢复到默认的
+				run({
+					...parseParams(pagination, filters, sorter),
+					pageSize: props.defaultPageSize as number,
+				});
 			}
-			// fetch({
-			// 	...parseParams(pagination, filters, sorter),
-			// 	pageSize: props.defaultPageSize,
-			// }); // 请求数据
 		};
 
 		/**
 		 * 合并列对象
 		 */
-		// 提供给renderEdit的函数
-		const handleSave = useCallback((row, defaultHandleData) => {}, []);
-		// 提供给renderDelete的函数
-		const handleDelete = useCallback((row: any, newData: any) => {}, []);
 		const mergedColumns = props.columns.map((col) => {
 			// 如果当前列存在搜索行为
 			if (col.search) {
@@ -163,35 +164,27 @@ const EditableTableForm: React.FC<IPros> = memo(
 				};
 			}
 			// 如果当前列为edit , 添加渲染编辑列
-			else if (col.dataIndex === 'edit') {
+			else if (col.editor !== undefined) {
 				// 如果col中含有handleSave的话，使用handleSave
-				let temp = handleSave;
-				if (!!col.handleSave) {
-					temp = (row, defaultHandleData) => {
-						col.handleSave(
-							row,
-							defaultHandleData,
-							props.handleSave,
-							handleRefresh
-						);
-					};
-				}
 				return {
 					...col,
 					render: (text: string, record: any) =>
-						renderEdit(text, record, temp),
+						renderEdit(text, record, col),
 				};
 			}
 			// 如果当前列为delete
-			else if (col.dataIndex === 'delete') {
+			else if (col.popconfirm !== undefined) {
 				return {
 					...col,
 					render: (text: string, record: any) =>
-						renderDelete(text, record, handleDelete),
+						renderPopconfirm(text, record, col),
 				};
 			}
 			return col;
 		});
+
+		// 是否处于禁用状态
+		const STATUS_DISABLED = requestLoading;
 		return (
 			<>
 				<div
@@ -200,10 +193,16 @@ const EditableTableForm: React.FC<IPros> = memo(
 					}}>
 					<Space size='middle'>
 						{props.modal}
-						<Button type='primary' onClick={handleRefresh}>
+						<Button
+							disabled={STATUS_DISABLED}
+							type='primary'
+							onClick={handleRefresh}>
 							刷新页面
 						</Button>
-						<Button type='primary' onClick={handleReset}>
+						<Button
+							disabled={STATUS_DISABLED}
+							type='primary'
+							onClick={handleReset}>
 							重置条件
 						</Button>
 					</Space>
@@ -214,7 +213,7 @@ const EditableTableForm: React.FC<IPros> = memo(
 						bordered
 						rowClassName='editable-row'
 						// loading
-						loading={loading}
+						loading={STATUS_DISABLED}
 						// 数据源与列对象
 						dataSource={state.data}
 						columns={mergedColumns}
@@ -243,14 +242,12 @@ const EditableTableForm: React.FC<IPros> = memo(
 const Index: React.FC<IPros> = (props) => {
 	const [form] = Form.useForm(); // 为表单设置fomr对象
 	return (
-		<TableFormContextProvider value={form}>
+		<TableFormContextProvider value={{ form }}>
 			<EditableTableForm
 				defaultPageSize={props.defaultPageSize}
-				BaseUrl={props.BaseUrl}
+				fetchUrl={props.fetchUrl}
 				columns={props.columns}
 				handleFetchData={props.handleFetchData}
-				handleSave={props.handleSave}
-				handleDelete={props.handleDelete}
 				modal={props.modal}
 			/>
 		</TableFormContextProvider>
@@ -259,6 +256,7 @@ const Index: React.FC<IPros> = (props) => {
 const defaultProps = {
 	defaultPageSize: 10,
 	modal: '',
+	loading: false,
 };
 Index.defaultProps = defaultProps;
 

@@ -1,5 +1,4 @@
 import { TablePaginationConfig } from 'antd/lib/table';
-import { stat } from 'fs';
 import React, { createContext, useReducer } from 'react';
 
 interface IPagination {
@@ -8,13 +7,13 @@ interface IPagination {
 	pageSize: number;
 }
 interface ITableForm {
-	data: any[];
-	pagination: IPagination;
-	editingKey: string;
-	searchText: string;
-	searchedColumn: string;
-	filteredInfo: TablePaginationConfig;
-	sortedInfo: any;
+	data: any[]; // 数据源
+	pagination: IPagination; // 分页数据
+	editingKey: string; // 当前编辑的item.id
+	searchText: string; // 搜索文本
+	searchedColumn: string; // 搜索列
+	filteredInfo: TablePaginationConfig; // 筛选对象
+	sortedInfo: any; // 排序对象
 }
 
 // state
@@ -33,7 +32,7 @@ const defualtState: ITableForm = {
 };
 
 // reducer
-type DispatchType = {
+export type DispatchType = {
 	type: string;
 	args: any[];
 };

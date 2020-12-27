@@ -31,13 +31,5 @@ const columns = [
 		title: '授权',
 		dataIndex: 'authority',
 	},
-	{
-		title: '编辑',
-		dataIndex: 'edit',
-	},
-	{
-		title: '删除',
-		dataIndex: 'delete',
-	},
 ];
 export default columns;

@@ -1,27 +1,31 @@
-import React, { memo } from 'react';
-// antd
+import React, { memo, useContext } from 'react';
 import { Input, InputNumber, Form } from 'antd';
+import { TableFormContext } from '../Provider';
 
-const defaultProps = {
-	inputType: 'string',
-};
-const EditableCell: React.FC<{
+interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+	editing: boolean;
 	dataIndex: string;
-	inputType: string;
-	rules: any[];
+	title: any;
+	inputType: 'number' | 'text' | 'textarea' | 'image';
 	record: any;
-	editing: string;
-}> = (props) => {
+	index: number;
+	children: React.ReactNode;
+	rules: any[];
+}
+const EditableCell: React.FC<EditableCellProps> = (props) => {
+	const { state } = useContext(TableFormContext);
 	const {
+		editing,
 		children,
 		dataIndex,
 		rules,
 		inputType,
 		record,
-		editing,
 		...restProps
 	} = props;
 	let inputNode;
+	// 正在编辑的状态
+	const editable = props.record && state.editingKey === props.record.id;
 	const CommonItem: React.FC<{}> = (props) => {
 		return (
 			<Form.Item
@@ -59,7 +63,6 @@ const EditableCell: React.FC<{
 				</CommonItem>
 			);
 	}
-	return <td {...restProps}>{editing ? <>{inputNode}</> : children}</td>;
+	return <td {...restProps}>{editable ? <>{inputNode}</> : children}</td>;
 };
-EditableCell.defaultProps = defaultProps;
 export default memo(EditableCell);

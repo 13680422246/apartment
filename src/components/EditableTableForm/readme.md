@@ -2,17 +2,39 @@
 
 # 使用的属性
 
-## 可编译的
+## 如何在表格中编辑
 
--   editable: true：表示该列可以编辑
--   inputType: ['text','number','image'] ; 输入类型
--   dataIndex = 'edit'：为编辑列
--   rules = []：编辑的时候的输入规则
--   handleSave: function ; 自定义的处理函数
+```tsx
+[
+    {
+        titile: 'name',
+        dataIndex: 'name',
+        editable: true, // 该列可以被编辑
+        inputType: 'number' | 'text' | 'textarea' | 'image', // 输入类型
+        rules: [], // 输入规则，遵循antd form
+    },
+    {
+        title: '编辑',
+        dataIndex: 'edit',
+        // 存在editor属性表示是可以编辑的
+        editor:{
+            url: '', // 执行编辑的URL
+            callback: ({})=>void; // 处理编辑结果
+        }
+    }
+]
+```
 
-## 删除
+## popconfirm 【气泡确认框】的列
 
--   dataIndex = 'delete': 为删除列
+```tsx
+popconfirm = {
+    url: '', // 执行删除的URL
+    text: 'text文本内容',
+    HintText: '确认框提示内容',
+    callback: ({ Hint, operator, dispatch })=>void, // 回调函数
+}
+```
 
 ## 搜索
 
