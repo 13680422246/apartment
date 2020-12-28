@@ -123,10 +123,7 @@ const Rooms: React.FC<IPros> = (props) => {
 	return (
 		<>
 			<BackTop />
-			<div
-				style={{
-					marginTop: '51px',
-				}}>
+			<div className={style.container}>
 				{data.map((room, index) => (
 					<RoomCard key={index} room={room} />
 				))}

@@ -19,7 +19,9 @@ const Home: React.FC = (props) => {
 			style={{
 				height: '100%',
 			}}>
-			<Header className='text'>
+			<Header
+				style={{ position: 'fixed', zIndex: 999, width: '100%' }}
+				className='text'>
 				<MyHeader />
 			</Header>
 			<Content>

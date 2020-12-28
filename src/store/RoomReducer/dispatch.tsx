@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IStore } from '..';
 import {
@@ -9,6 +10,21 @@ import { Filter } from './interface';
 
 export const useRoomStore = () => {
 	return useSelector((store: IStore) => store.room);
+};
+// 获取tgas
+export const useTags = (): React.ReactNode[] => {
+	const state = useRoomStore();
+	const tags = [];
+	if (state.price.title !== '租金') {
+		tags.push(state.price.title);
+	}
+	if (state.area.title !== '面积') {
+		tags.push(state.area.title);
+	}
+	if (state.dir.title !== '朝向') {
+		tags.push(state.dir.title);
+	}
+	return tags;
 };
 export const useRoomDispatch = () => {
 	const dispatch = useDispatch();

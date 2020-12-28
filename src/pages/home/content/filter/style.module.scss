@@ -1,3 +1,4 @@
+// Dir.tsx的容器
 .container {
 	position: absolute;
 	left: 0;
@@ -7,20 +8,7 @@
 	background-color: white;
 	overflow-y: auto;
 }
-.list {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 100px;
-	overflow-y: auto;
-}
-.bottom {
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-}
+// 选择文本样式
 .textSelect {
 	color: #ff552e;
 	font-weight: bolder;

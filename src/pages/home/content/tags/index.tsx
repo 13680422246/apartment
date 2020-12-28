@@ -1,26 +1,23 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { Tag } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
+import style from './index.module.scss';
+import { useTags } from '../../../../store/RoomReducer/dispatch';
 
-const Test: React.FC<{}> = (props) => {
-	const [tags, setTags] = useState<string[]>(['tag1', 'tag2', 'tag3']);
-
+interface IPros {}
+const Tags: React.FC<IPros> = (props) => {
+	const tags = useTags();
 	// 从tags中删除tag
-	const handleClose = (tag: string) => {
-		console.info(`closed ${tag}`);
-		setTags((tags) => {
-			const newTags = tags.filter((item) => item !== tag);
-			return newTags;
-		});
-	};
-	const tagChild = tags.map((tag) => {
+	const handleClose = (index: number) => {};
+	const tagChild = tags.map((tag, index) => {
 		return (
-			<span key={tag} style={{ display: 'inline-block' }}>
+			<span key={index} style={{ display: 'inline-block' }}>
 				<Tag
+					className={style.tag}
 					closable
 					onClose={(e) => {
 						e.preventDefault();
-						handleClose(tag);
+						handleClose(index);
 					}}>
 					{tag}
 				</Tag>
@@ -29,7 +26,7 @@ const Test: React.FC<{}> = (props) => {
 	});
 
 	return (
-		<div style={{ marginBottom: 16 }}>
+		<div className={style.container}>
 			<TweenOneGroup
 				enter={{
 					scale: 0.8,
@@ -47,5 +44,4 @@ const Test: React.FC<{}> = (props) => {
 		</div>
 	);
 };
-
-export default memo(Test);
+export default memo(Tags);

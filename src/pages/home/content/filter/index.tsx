@@ -15,11 +15,14 @@ const collapse: React.CSSProperties = {
 	display: 'flex',
 	justifyContent: 'space-around',
 	backgroundColor: 'white',
-	position: 'absolute',
+	position: 'fixed',
 	left: 0,
 	right: 0,
+	top: '64px',
 	zIndex: 200,
+	boxShadow: '0 1px 0 rgb(0 0 0 / 10%)',
 };
+// box-shadow: 0 1px 0 rgb(0 0 0 / 10%);
 
 const Filter: React.FC<{}> = (props) => {
 	const store = useRoomStore();
