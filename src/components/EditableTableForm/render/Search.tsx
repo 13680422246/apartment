@@ -1,13 +1,15 @@
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Space, Button, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { TableFormContext } from '../Provider';
+import { useSelector } from '../store';
+import useDispatch from '../store/dispatch';
 
 /**
  * 搜索输入框
  */
 export default (function (props: any) {
-	const { dispatch, state } = useContext(TableFormContext);
+	const state = useSelector((store) => store.state);
+	const dispatch = useDispatch();
 	const {
 		dataIndex,
 		setSelectedKeys,
@@ -19,24 +21,12 @@ export default (function (props: any) {
 	const inputRef = useRef<Input | null>(null);
 	const handleSearch = (selectedKeys: any) => {
 		confirm();
-		dispatch &&
-			dispatch({
-				type: 'searchText',
-				args: [selectedKeys[0]],
-			});
-		dispatch &&
-			dispatch({
-				type: 'searchedColumn',
-				args: [dataIndex],
-			});
+		dispatch.setSearchText(selectedKeys[0]);
+		dispatch.setSearchedColumn(dataIndex);
 	};
 	const handleReset = () => {
 		clearFilters();
-		dispatch &&
-			dispatch({
-				type: 'searchText',
-				args: [''],
-			});
+		dispatch.setSearchText('');
 	};
 	/**
 	 * 监听搜索文本

@@ -1,8 +1,10 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
 import { Button, Form, Space, Table } from 'antd';
 import { useRequest } from '../../utils';
 import EditableCell from './render/EditableCell';
-import { TableFormContext, TableFormContextProvider } from './Provider';
+import { Provider } from './store';
+import { useSelector } from './store';
+import useDispatch from './store/dispatch';
 import renderPopconfirm from './render/renderPopconfirm';
 import renderEdit from './render/renderEdit';
 import renderSearch from './render/renderSearch';
@@ -33,7 +35,9 @@ interface IPros {
 }
 const EditableTableForm: React.FC<IPros> = memo(
 	(props) => {
-		const { state, dispatch, form } = useContext(TableFormContext);
+		const store = useSelector((store) => store);
+		const dispatch = useDispatch();
+		const { state, form } = store;
 		/**
 		 * 加载数据
 		 */
@@ -53,24 +57,15 @@ const EditableTableForm: React.FC<IPros> = memo(
 		>(props.fetchUrl, {
 			onSuccess: ({ data }) => {
 				if (dispatch) {
-					dispatch({
-						type: 'pagination',
-						args: [
-							{
-								current: data.pageNum,
-								pageSize: data.pageSize,
-								total: data.total,
-							},
-						],
+					dispatch.setPagination({
+						current: data.pageNum,
+						pageSize: data.pageSize,
+						total: data.total,
 					});
-
 					props.handleFetchData({
 						datasource: data.list,
 						emit: (datasource) => {
-							dispatch({
-								type: 'data',
-								args: [datasource],
-							});
+							dispatch.setData(datasource);
 						},
 					});
 				}
@@ -111,15 +106,9 @@ const EditableTableForm: React.FC<IPros> = memo(
 			console.info(`change table`);
 			if (dispatch) {
 				// 取消编辑状态
-				dispatch({
-					type: 'editingKey',
-					args: [''],
-				});
+				dispatch.setEditingKey('');
 				// 设置筛选和排序
-				dispatch({
-					type: 'setFilterAndSorter',
-					args: [filters, sorter],
-				});
+				dispatch.setFilterAndSorter(filters, sorter);
 				// 重新请求数据
 				// 注意: 将defaultPageSize恢复到默认的
 				run({
@@ -132,59 +121,65 @@ const EditableTableForm: React.FC<IPros> = memo(
 		/**
 		 * 合并列对象
 		 */
-		const mergedColumns = props.columns.map((col) => {
-			// 如果当前列存在搜索行为
-			if (col.search) {
-				col = {
-					...col,
-					...renderSearch(col.dataIndex, col.render),
-				};
-			}
-			// 如果存在排序 - sorter
-			if (col.sorter) {
-				col = {
-					...col,
-					sortOrder:
-						state.sortedInfo.field === col.dataIndex &&
-						state.sortedInfo.order,
-				};
-			}
-			// 如果可以编辑
-			if (col.editable) {
-				return {
-					...col,
-					onCell: (record: any) => ({
-						record,
-						inputType: col.inputType ? col.inputType : 'text',
-						dataIndex: col.dataIndex,
-						title: col.title,
-						editing: false,
-						rules: col.rules ? col.rules : [],
-					}),
-				};
-			}
-			// 如果当前列为edit , 添加渲染编辑列
-			else if (col.editor !== undefined) {
-				// 如果col中含有handleSave的话，使用handleSave
-				return {
-					...col,
-					render: (text: string, record: any) =>
-						renderEdit(text, record, col),
-				};
-			}
-			// 如果当前列为delete
-			else if (col.popconfirm !== undefined) {
-				return {
-					...col,
-					render: (text: string, record: any) =>
-						renderPopconfirm(text, record, col),
-				};
-			}
-			return col;
-		});
+		const mergedColumns = useMemo(
+			() =>
+				props.columns.map((col) => {
+					// 如果当前列存在搜索行为
+					if (col.search) {
+						col = {
+							...col,
+							...renderSearch(col.dataIndex, col.render),
+						};
+					}
+					// 如果存在排序 - sorter
+					if (col.sorter) {
+						col = {
+							...col,
+							sortOrder:
+								state.sortedInfo.field === col.dataIndex &&
+								state.sortedInfo.order,
+						};
+					}
+					// 如果可以编辑
+					if (col.editable) {
+						return {
+							...col,
+							onCell: (record: any) => ({
+								record,
+								inputType: col.inputType
+									? col.inputType
+									: 'text',
+								dataIndex: col.dataIndex,
+								title: col.title,
+								editing: false,
+								rules: col.rules ? col.rules : [],
+							}),
+						};
+					}
+					// 如果当前列为edit , 添加渲染编辑列
+					else if (col.editor !== undefined) {
+						// 如果col中含有handleSave的话，使用handleSave
+						return {
+							...col,
+							render: (text: string, record: any) =>
+								renderEdit(text, record, col),
+						};
+					}
+					// 如果当前列为delete
+					else if (col.popconfirm !== undefined) {
+						return {
+							...col,
+							render: (text: string, record: any) =>
+								renderPopconfirm(text, record, col),
+						};
+					}
+					return col;
+				}),
+			[props.columns, state.sortedInfo.field, state.sortedInfo.order]
+		);
 
 		// 是否处于禁用状态
-		const STATUS_DISABLED = requestLoading;
+		const STATUS_DISABLED = requestLoading || state.loading;
 		return (
 			<>
 				<div
@@ -242,7 +237,7 @@ const EditableTableForm: React.FC<IPros> = memo(
 const Index: React.FC<IPros> = (props) => {
 	const [form] = Form.useForm(); // 为表单设置fomr对象
 	return (
-		<TableFormContextProvider value={{ form }}>
+		<Provider values={{ form }}>
 			<EditableTableForm
 				defaultPageSize={props.defaultPageSize}
 				fetchUrl={props.fetchUrl}
@@ -250,7 +245,7 @@ const Index: React.FC<IPros> = (props) => {
 				handleFetchData={props.handleFetchData}
 				modal={props.modal}
 			/>
-		</TableFormContextProvider>
+		</Provider>
 	);
 };
 const defaultProps = {

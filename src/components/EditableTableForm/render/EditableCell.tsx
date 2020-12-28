@@ -1,6 +1,6 @@
-import React, { memo, useContext } from 'react';
+import React, { memo } from 'react';
 import { Input, InputNumber, Form } from 'antd';
-import { TableFormContext } from '../Provider';
+import { useSelector } from '../store';
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
@@ -13,7 +13,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	rules: any[];
 }
 const EditableCell: React.FC<EditableCellProps> = (props) => {
-	const { state } = useContext(TableFormContext);
+	const state = useSelector((store) => store.state);
 	const {
 		editing,
 		children,

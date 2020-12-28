@@ -18,8 +18,7 @@
         dataIndex: 'edit',
         // 存在editor属性表示是可以编辑的
         editor:{
-            url: '', // 执行编辑的URL
-            callback: ({})=>void; // 处理编辑结果
+            callback: ({ row })=>void; // 处理编辑结果
         }
     }
 ]
@@ -29,10 +28,9 @@
 
 ```tsx
 popconfirm = {
-    url: '', // 执行删除的URL
     text: 'text文本内容',
     HintText: '确认框提示内容',
-    callback: ({ Hint, operator, dispatch })=>void, // 回调函数
+    callback: ({ id, setLoading, deleteData })=>void, // 回调函数
 }
 ```
 

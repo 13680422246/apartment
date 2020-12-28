@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import Search from './Search';
-import { TableFormContext } from '../Provider';
+import { useSelector } from '../store';
 /**
  * 搜索后高亮显示文本
  */
 const HighlightComponent: React.FC<any> = function (props) {
 	const { dataIndex, text } = props;
-	const { state } = useContext(TableFormContext);
+	const state = useSelector((store) => store.state);
 	return state.searchedColumn === dataIndex ? (
 		<Highlighter
 			highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}

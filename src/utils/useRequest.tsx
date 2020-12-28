@@ -58,18 +58,33 @@ function useRequest<ResDataType, ParamsType>(
 	const [loading, setLoading] = useState<boolean>(false); // 加载中
 	const [error, setError] = useState<Error>(); // 错误信息
 	const [data, setData] = useState<ResDataType>(); // 请求返回的数据
-	const runing = useRef<boolean>(false); // 是否正在运行
+	const running = useRef<boolean>(false); // 是否正在运行
 	const source = Axios.CancelToken.source(); // 取消axios请求
 
 	/**
+	 * 为options添加默认值
+	 */
+	options = {
+		...options,
+		...{
+			onError: ({ Hint, error }) => {
+				Hint({
+					type: 'warning',
+					content: error.message,
+				});
+			},
+		},
+	};
+
+	/**
 	 * 组件结束的时候
-	 * 取消请求，设置runing = false-防止内存泄漏
+	 * 取消请求，设置running = false-防止内存泄漏
 	 */
 	useEffect(() => {
-		runing.current = true;
+		running.current = true;
 		return () => {
-			if (runing.current) {
-				runing.current = false;
+			if (running.current) {
+				running.current = false;
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,7 +101,7 @@ function useRequest<ResDataType, ParamsType>(
 				[propsname: string]: any;
 			}
 		) => {
-			runing.current = true; // 设置为可以运行
+			running.current = true; // 设置为可以运行
 			setLoading(true); // 加载中
 			return proxy
 				.post(url, params, {
@@ -102,7 +117,7 @@ function useRequest<ResDataType, ParamsType>(
 					return res.data;
 				})
 				.then((data: ResDataType) => {
-					if (runing.current) {
+					if (running.current) {
 						/**
 						 * 处理请求成功
 						 */
@@ -116,13 +131,20 @@ function useRequest<ResDataType, ParamsType>(
 								values,
 							});
 						}
+						return {
+							running: true,
+							data,
+							params,
+							Hint,
+							values,
+						};
 					}
 				})
 				.catch((err: Error) => {
 					/**
 					 * 处理请求失败
 					 */
-					if (runing.current) {
+					if (running.current) {
 						setLoading(false);
 						setError(err);
 						if (options.onError) {
@@ -131,9 +153,17 @@ function useRequest<ResDataType, ParamsType>(
 								Hint,
 							});
 						}
+						return {
+							running: true,
+							data,
+							params,
+							Hint,
+							values,
+						};
 					}
 				});
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[options, source.token, url]
 	);
 	/**
