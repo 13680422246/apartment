@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { Popconfirm } from 'antd';
 import A from '../../A';
+import { useSelector } from '../store';
 import useDispatch from '../store/dispatch';
 
 export interface IActionPopconfirm {
@@ -9,10 +10,10 @@ export interface IActionPopconfirm {
 		text: string;
 		HintText: string;
 		callback: (params: {
-			id: string;
+			record: any;
 			setLoading: (bool: boolean) => void;
 			setData: (data: any) => void;
-			deleteData: (id: string) => void;
+			data: any[];
 		}) => void;
 	};
 }
@@ -23,16 +24,17 @@ interface IProps {
 }
 const Delete: React.FC<IProps> = memo((props) => {
 	const dispatch = useDispatch();
+	const state = useSelector((store) => store.state);
 	const { popconfirm } = props.col;
 	return (
 		<Popconfirm
 			title={popconfirm.HintText}
 			onConfirm={() => {
 				popconfirm.callback({
-					id: props.record.id,
+					record: props.record,
 					setLoading: dispatch.setLoading,
 					setData: dispatch.setData,
-					deleteData: dispatch.deleteData,
+					data: state.data,
 				});
 			}}>
 			<span>

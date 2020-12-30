@@ -2,9 +2,10 @@ import React, { memo, useCallback } from 'react';
 import { useTitle } from '../../../utils';
 import TableForm from '../../../components/EditableTableForm';
 import columns from './columns';
-import useDelete from './useDelete';
-import useEdit from './useEdit';
+import useDelete from '../utils/useDelete';
+import useEdit from '../utils/useEdit';
 import AuthorityModal from './AuthorityModal';
+import AddModal from './AddModal';
 
 interface IPros {}
 const Role: React.FC<IPros> = (props) => {
@@ -38,6 +39,7 @@ const Role: React.FC<IPros> = (props) => {
 
 	return (
 		<TableForm
+			modal={<AddModal url={`${BaseUrl}/add`} />}
 			fetchUrl={`${BaseUrl}/findAll`}
 			columns={newColumns}
 			handleFetchData={handleFetchData}

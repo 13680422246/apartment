@@ -7,6 +7,7 @@ import { useNotAdminThenGoBack } from '../../store/userRedcer/dispatch';
 const { Header, Content } = Layout;
 
 const Role = lazy(() => import('./Role'));
+const Permission = lazy(() => import('./Permission'));
 const HomeAdmin = lazy(() => import('./HomeAdmin'));
 const Chart = lazy(() => import('./Chart'));
 const Test = lazy(() => import('./Test'));
@@ -35,6 +36,11 @@ const Admin: React.FC<IPros> = (props) => {
 						}>
 						<Switch>
 							<Route path='/admin/role' component={Role} exact />
+							<Route
+								path='/admin/permission'
+								component={Permission}
+								exact
+							/>
 							<Route
 								path='/admin/chart'
 								component={Chart}

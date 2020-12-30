@@ -9,6 +9,7 @@ import renderPopconfirm from './render/renderPopconfirm';
 import renderEdit from './render/renderEdit';
 import renderSearch from './render/renderSearch';
 import parseParams from './parseParams';
+import A from '../A';
 
 export interface PageInfo {
 	hasNextPage: boolean;
@@ -178,8 +179,8 @@ const EditableTableForm: React.FC<IPros> = memo(
 			[props.columns, state.sortedInfo.field, state.sortedInfo.order]
 		);
 
-		// 是否处于禁用状态
-		const STATUS_DISABLED = requestLoading || state.loading;
+		// 是否处于加载状态
+		const STATUS_LOADING = requestLoading || state.loading;
 		return (
 			<>
 				<div
@@ -188,18 +189,16 @@ const EditableTableForm: React.FC<IPros> = memo(
 					}}>
 					<Space size='middle'>
 						{props.modal}
-						<Button
-							disabled={STATUS_DISABLED}
-							type='primary'
-							onClick={handleRefresh}>
-							刷新页面
-						</Button>
-						<Button
-							disabled={STATUS_DISABLED}
-							type='primary'
-							onClick={handleReset}>
-							重置条件
-						</Button>
+						<A disable={STATUS_LOADING || dispatch.getDisable()}>
+							<Button type='primary' onClick={handleRefresh}>
+								刷新页面
+							</Button>
+						</A>
+						<A disable={STATUS_LOADING || dispatch.getDisable()}>
+							<Button type='primary' onClick={handleReset}>
+								重置条件
+							</Button>
+						</A>
 					</Space>
 				</div>
 				<Form form={form}>
@@ -208,7 +207,7 @@ const EditableTableForm: React.FC<IPros> = memo(
 						bordered
 						rowClassName='editable-row'
 						// loading
-						loading={STATUS_DISABLED}
+						loading={STATUS_LOADING}
 						// 数据源与列对象
 						dataSource={state.data}
 						columns={mergedColumns}

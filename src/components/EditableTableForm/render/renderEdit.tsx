@@ -12,7 +12,7 @@ export interface IActionSave {
 			cancel: () => void;
 			setLoading: (bool: boolean) => void;
 			setData: (data: any) => void;
-			editData: (row: any) => void;
+			data: any[];
 		}) => void;
 	};
 }
@@ -55,13 +55,14 @@ const Edit: React.FC<IPros> = memo((props) => {
 			// 验证表单 - record是旧数据, row是新数据
 			form.validateFields().then((row: any) => {
 				row.id = record.id;
+				row.parentid = record.parentid;
 				// run(row);
 				props.col.editor.callback({
 					row,
 					cancel,
 					setLoading: dispatch.setLoading,
 					setData: dispatch.setData,
-					editData: dispatch.editData,
+					data: state.data,
 				});
 			});
 		} catch (errInfo) {

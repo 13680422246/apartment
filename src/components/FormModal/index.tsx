@@ -7,6 +7,7 @@ export interface IPros {
 	component: React.ReactNode; // 点击component显示modal
 	open?: () => void; // 点击component的时候触发
 	callback?: (params: {
+		row: any;
 		setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 		setConfirmLoading: React.Dispatch<React.SetStateAction<boolean>>;
 		resetFields: () => void;
@@ -34,6 +35,7 @@ const FormModal: React.FC<IPros> = (props) => {
 		form.validateFields().then((row) => {
 			props.callback &&
 				props.callback({
+					row,
 					setVisible,
 					setConfirmLoading,
 					resetFields: () => {
