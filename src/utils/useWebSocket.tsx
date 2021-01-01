@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * 连接聊天服务器
  */
 
-function useWebSocket(socketUrl: string, handleMessage: () => void) {
+function useWebSocket(socketUrl: string, handleMessage: (data: any) => void) {
 	const [disable, setDisable] = useState(true); // 是否禁用
 	const running = useRef<boolean>(true); // 是否正在运行
 	const wsRef = useRef<WebSocket>();
+
+	/**
+	 * 连接聊天服务器
+	 */
 	useEffect(() => {
 		wsRef.current = new WebSocket(socketUrl);
 		wsRef.current.onopen = (e) => {
@@ -24,7 +28,10 @@ function useWebSocket(socketUrl: string, handleMessage: () => void) {
 				setDisable(true);
 			}
 		};
-		wsRef.current.onmessage = handleMessage;
+		wsRef.current.onmessage = (e) => {
+			const data = JSON.parse(e.data);
+			handleMessage(data);
+		};
 		return () => {
 			if (wsRef.current) {
 				wsRef.current.close();
@@ -33,9 +40,24 @@ function useWebSocket(socketUrl: string, handleMessage: () => void) {
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	/**
+	 * 发送信息
+	 */
+	const sendContent = useCallback((userid: number, content: string) => {
+		if (wsRef.current) {
+			wsRef.current.send(
+				JSON.stringify({
+					userid,
+					content,
+				})
+			);
+		}
+	}, []);
 	return {
 		disable,
 		wsRef,
+		sendContent,
 	};
 }
 

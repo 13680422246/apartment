@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useLayoutEffect, useState } from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Skeleton, Result, Button } from 'antd';
 import icons from './routers';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useRequest } from '../../../utils';
@@ -18,7 +18,7 @@ const SideBar: React.FC<IPros> = (props) => {
 	 * 请求我的权限列表，渲染侧边栏
 	 */
 	const [side, setSide] = useState<ISideItem[]>([]); // 侧边栏
-	const { run } = useRequest<
+	const { run, loading, error } = useRequest<
 		{
 			id: number;
 			parentid: number;
@@ -57,15 +57,40 @@ const SideBar: React.FC<IPros> = (props) => {
 		run({});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	if (error) {
+		return (
+			<Result
+				status='404'
+				title='404'
+				subTitle={error.message}
+				extra={
+					<Button type='primary'>
+						<NavLink to='/'>刷新</NavLink>
+					</Button>
+				}
+			/>
+		);
+	}
 	return (
 		<Layout.Sider collapsible breakpoint='lg'>
-			<Menu theme='dark' mode='inline' selectedKeys={index}>
-				{side.map((item, index) => (
-					<Menu.Item key={index} icon={item.icon}>
-						<NavLink to={item.url}>{item.title}</NavLink>
-					</Menu.Item>
-				))}
-			</Menu>
+			{loading ? (
+				<Skeleton
+					loading={loading}
+					active
+					paragraph={{
+						rows: 20,
+					}}
+				/>
+			) : (
+				<Menu theme='dark' mode='inline' selectedKeys={index}>
+					{side.map((item, index) => (
+						<Menu.Item key={index} icon={item.icon}>
+							<NavLink to={item.url}>{item.title}</NavLink>
+						</Menu.Item>
+					))}
+				</Menu>
+			)}
 		</Layout.Sider>
 	);
 };

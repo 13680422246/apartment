@@ -59,6 +59,7 @@ const AddModal: React.FC<IPros> = (props) => {
 	);
 	return (
 		<FormModal
+			disabled={dispatch.getDisable()}
 			title='添加角色'
 			okButtonDisable={loading}
 			callback={callback}

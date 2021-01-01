@@ -28,7 +28,7 @@ export const useNotAdminThenGoBack = () => {
 	const history = useHistory();
 	useEffect(() => {
 		if (store.roleid === '') {
-			history.goBack();
+			history.push('/');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [store.roleid]);

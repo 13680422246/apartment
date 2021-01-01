@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import {
 	useUserStore,
 	useUserDispatch,
+	useNotAdminThenGoBack,
 } from '../../../store/userRedcer/dispatch';
 import { useRequest } from '../../../utils';
 import { LoginOutlined } from '@ant-design/icons';
@@ -33,10 +34,15 @@ const Header: React.FC<IPros> = (props) => {
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	/**
+	 * 判断用户是否具有权限
+	 */
+	useNotAdminThenGoBack();
 	return (
 		<Row justify='space-between'>
 			<Col>
-				<NavLink to='/' className='text'>
+				<NavLink to='/admin' className='text'>
 					公寓管理系统
 				</NavLink>
 			</Col>

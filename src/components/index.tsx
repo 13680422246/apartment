@@ -7,6 +7,7 @@ export { default as Hint } from './Hint';
 export { default as RoomCard } from './RoomCard';
 export { default as FormModal } from './FormModal';
 export { default as A } from './A';
+export { default as Chat } from './Chat';
 export type { MinAndMax } from './FilterSlider';
 export type { Handle } from './Modal';
 export type { HintOptions } from './Hint';

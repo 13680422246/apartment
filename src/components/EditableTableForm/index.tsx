@@ -191,7 +191,7 @@ const EditableTableForm: React.FC<IPros> = memo(
 						{props.modal}
 						<A disable={STATUS_LOADING || dispatch.getDisable()}>
 							<Button type='primary' onClick={handleRefresh}>
-								刷新页面
+								刷新表单
 							</Button>
 						</A>
 						<A disable={STATUS_LOADING || dispatch.getDisable()}>

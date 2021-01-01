@@ -1,0 +1,63 @@
+// 整个右侧界面
+.container {
+	position: relative;
+	height: 100%;
+	overflow-y: auto;
+	.header {
+		height: calc(100% - 125px);
+		overflow-y: auto;
+	}
+}
+// 加载聊天信息的时候的loading
+.center {
+	position: absolute !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+}
+// 内容 - 公共样式
+.commonContent {
+	background-color: white;
+	border-radius: 10px;
+	padding: 10px;
+}
+.right {
+	display: flex;
+	justify-content: flex-end;
+	margin-right: 20px;
+	// 标题
+	.title {
+		text-align: end;
+	}
+	// 内容
+	.content {
+		margin-left: 110px;
+		@extend .commonContent;
+	}
+}
+.left {
+	margin-left: 20px;
+	// 标题
+	// 内容
+	.content {
+		margin-right: 110px;
+		@extend .commonContent;
+	}
+}
+.loadmore {
+	text-align: center;
+	display: block;
+}
+// 下面的输入框
+.form {
+	position: relative;
+	height: 98px;
+	textarea {
+		resize: none;
+	}
+}
+.button {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+}
