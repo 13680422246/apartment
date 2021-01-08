@@ -8,3 +8,4 @@ export { default as useTitle } from './useTitle';
 export { default as useChart } from './useChart';
 export { default as generateStore } from './generateStore';
 export { default as localeMoment } from './moment';
+export { default as isIntNumber } from './isIntNumber';

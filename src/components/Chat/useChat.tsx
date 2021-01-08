@@ -11,13 +11,19 @@ export interface IChat {
 	content: string;
 	createtime: string;
 }
-function useChat(userid: number, scroll: React.RefObject<HTMLDivElement>) {
+function useChat(
+	isAdmin: boolean,
+	disabled: boolean,
+	userid: number,
+	scroll: React.RefObject<HTMLDivElement>
+) {
 	const [chats, setChats] = useState<IChat[]>([]);
 	const [current, setCurrent] = useState<number>(0); // 当前页数
 	const [hasNextPage, setHasNextPage] = useState<boolean>(true); // 是否还能加载数据
 	/**
 	 * 加载更多聊天信息
 	 */
+	const URL = isAdmin ? '/admin/chat/findChat' : '/home/chat/findChat';
 	const { run, loading: loadMoreLoading } = useRequest<
 		{
 			pageNum: number; // 第几页
@@ -29,7 +35,7 @@ function useChat(userid: number, scroll: React.RefObject<HTMLDivElement>) {
 			current: number;
 			pageSize: number;
 		}
-	>('/admin/chat/findChat', {
+	>(URL, {
 		onSuccess: ({ data }) => {
 			if (!scroll.current) throw new Error();
 			// 设置内容之前的高度
@@ -38,7 +44,9 @@ function useChat(userid: number, scroll: React.RefObject<HTMLDivElement>) {
 			setHasNextPage(data.hasNextPage);
 			setChats((datasource) => {
 				const newData = [...datasource];
-				newData.unshift(...data.list.reverse());
+				if (Array.isArray(data.list)) {
+					newData.unshift(...data.list.reverse());
+				}
 				return newData;
 			});
 
@@ -70,9 +78,12 @@ function useChat(userid: number, scroll: React.RefObject<HTMLDivElement>) {
 				newChats.push({
 					id: 1,
 					userid,
-					issend: 0,
+					issend: isAdmin ? 0 : 1,
 					content,
-					createtime: new Date().getTime().toString(),
+					// 服务器给的格式 vs new Date();
+					// 1608888260000
+					// 1610078732629
+					createtime: new Date().toString(),
 				});
 				return newChats;
 			});
@@ -82,16 +93,18 @@ function useChat(userid: number, scroll: React.RefObject<HTMLDivElement>) {
 				scroll.current.scrollTop = height;
 			}
 		},
-		[scroll, userid]
+		[isAdmin, scroll, userid]
 	);
 
 	// 进入的时候加载一次数据
 	useEffect(() => {
-		run({
-			userid,
-			current: 1,
-			pageSize: 10,
-		});
+		if (!disabled) {
+			run({
+				userid,
+				current: 1,
+				pageSize: 10,
+			});
+		}
 		return () => {
 			setChats([]);
 		};

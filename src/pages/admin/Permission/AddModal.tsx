@@ -93,7 +93,7 @@ const AddModal: React.FC<IPros> = (props) => {
 					<span>添加子权限</span>
 				)
 			}>
-			<Form.Item name='parentid' initialValue={props.parentid}>
+			<Form.Item hidden name='parentid' initialValue={props.parentid}>
 				<Input disabled />
 			</Form.Item>
 			<Form.Item

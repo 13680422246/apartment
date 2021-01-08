@@ -6,6 +6,7 @@ import {
 	useUserDispatch,
 } from '../../../store/userRedcer/dispatch';
 import Logo from './Logo';
+import Chat from '../Chat';
 
 interface Ipros {}
 
@@ -58,7 +59,7 @@ const Header: React.FC<Ipros> = (props) => {
 							注销登录
 						</NavLink>
 						<MyDivider />
-						<NavLink to=''>联系客服</NavLink>
+						<Chat />
 					</div>
 				)}
 			</Col>

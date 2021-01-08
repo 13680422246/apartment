@@ -1,6 +1,20 @@
 .container {
 	background-color: white;
 }
+.center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+// 加载中
+.loading {
+	@extend .center;
+}
+// 错误展示
+.result {
+	@extend .center;
+}
 // 图像区域
 .img {
 	text-align: center;
@@ -18,16 +32,12 @@
 	display: flex;
 	justify-content: space-around;
 	text-align: center;
+	div {
+		width: 300px;
+	}
 }
 // 标签
 .tags {
 	width: 80%;
 	margin: auto;
-}
-// 加载中
-.loading {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 }

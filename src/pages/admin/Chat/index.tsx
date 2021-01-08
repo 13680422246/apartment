@@ -119,6 +119,7 @@ const Chat: React.FC<IPros> = (props) => {
 			<div hidden={currentFriend === undefined} className={style.chat}>
 				{currentFriend !== undefined ? (
 					<ChatComponent
+						isAdmin={true}
 						userid={parseInt(currentFriend.userid)}
 						username={currentFriend.username}
 						buttonOptions={{

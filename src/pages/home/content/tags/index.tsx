@@ -2,13 +2,20 @@ import React, { memo } from 'react';
 import { Tag } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
 import style from './index.module.scss';
-import { useTags } from '../../../../store/RoomReducer/dispatch';
+import {
+	useTags,
+	useRoomDispatch,
+} from '../../../../store/RoomReducer/dispatch';
 
 interface IPros {}
 const Tags: React.FC<IPros> = (props) => {
+	const dispatch = useRoomDispatch();
+	// 从store中获取tags
 	const tags = useTags();
 	// 从tags中删除tag
-	const handleClose = (index: number) => {};
+	const handleClose = (tag: string) => {
+		dispatch.deleteTag(tag);
+	};
 	const tagChild = tags.map((tag, index) => {
 		return (
 			<span key={index} style={{ display: 'inline-block' }}>
@@ -17,9 +24,9 @@ const Tags: React.FC<IPros> = (props) => {
 					closable
 					onClose={(e) => {
 						e.preventDefault();
-						handleClose(index);
+						handleClose(tag.tag);
 					}}>
-					{tag}
+					{tag.value}
 				</Tag>
 			</span>
 		);

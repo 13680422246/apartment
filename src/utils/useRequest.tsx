@@ -65,7 +65,6 @@ function useRequest<ResDataType, ParamsType>(
 	 * 为options添加默认值
 	 */
 	options = {
-		...options,
 		...{
 			onError: ({ Hint, error }) => {
 				Hint({
@@ -74,6 +73,7 @@ function useRequest<ResDataType, ParamsType>(
 				});
 			},
 		},
+		...options,
 	};
 
 	/**

@@ -12,23 +12,53 @@ export const useRoomStore = () => {
 	return useSelector((store: IStore) => store.room);
 };
 // 获取tgas
-export const useTags = (): React.ReactNode[] => {
+export const useTags = (): {
+	tag: string;
+	value: React.ReactNode;
+}[] => {
 	const state = useRoomStore();
 	const tags = [];
 	if (state.price.title !== '租金') {
-		tags.push(state.price.title);
+		tags.push({
+			tag: '租金',
+			value: state.price.title,
+		});
 	}
 	if (state.area.title !== '面积') {
-		tags.push(state.area.title);
+		tags.push({
+			tag: '面积',
+			value: state.area.title,
+		});
 	}
 	if (state.dir.title !== '朝向') {
-		tags.push(state.dir.title);
+		tags.push({
+			tag: '朝向',
+			value: state.dir.title,
+		});
 	}
 	return tags;
 };
 export const useRoomDispatch = () => {
 	const dispatch = useDispatch();
 	return {
+		// 删除标签
+		deleteTag(tag: string) {
+			if (tag === '租金') {
+				this.setPrice({
+					title: '不限',
+					min: undefined,
+					max: undefined,
+				});
+			} else if (tag === '面积') {
+				this.setArea({
+					title: '不限',
+					min: undefined,
+					max: undefined,
+				});
+			} else if (tag === '朝向') {
+				this.setDir('不限');
+			}
+		},
 		// 设置租金
 		setPrice(value: Filter) {
 			dispatch({

@@ -1,75 +1,27 @@
-import React, { memo, useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import { Room as RoomType } from '../../../components';
-import { useRequest, useTitle } from '../../../utils';
-import { Image, Divider, Tag, Grid, Typography } from 'antd';
+import React, { memo } from 'react';
+import { useTitle } from '../../../utils';
+import { Image, Divider, Tag, Typography, Spin } from 'antd';
 import style from './index.module.scss';
 import { baseURL } from '../../../config';
+import { useImgWidth, splitTags } from './util';
+import useRoom from './useRoom';
 
-const { useBreakpoint } = Grid;
 const { Title, Text } = Typography;
-
-// 分割标签 - eg. 配套齐全/精装修/拎包入住
-function splitTags(tags: string) {
-	return tags.split('/');
-}
-// 获取图片的宽度
-const useImgWidth = () => {
-	const screens = useBreakpoint(); // 响应式布局
-	let width = '50%';
-	if (screens.xs === false) {
-		width = '30%';
-	}
-	if (screens.xl === false) {
-		width = '50%';
-	}
-	if (screens.xs) {
-		width = '90%';
-	}
-	return width;
-};
 
 interface IPros {}
 const defaultProps = {};
 const RoomComponent: React.FC<IPros> = (props) => {
-	const params = useParams<{ id: string }>();
-	const { state } = useLocation<{ room: RoomType }>(); // 从首页点击传递过来的参数
-	const width = useImgWidth();
-	const [room, setRoom] = useState<RoomType | undefined>(() => {
-		if (!state) return undefined;
-		else return state.room;
-	});
-	/**
-	 * 请求数据
-	 */
-	const { loading, run } = useRequest<
-		{
-			type: 'success' | 'error';
-			msg: string;
-		},
-		{}
-	>(`/home/room/${params.id}`, {
-		onSuccess: ({ data, params }) => {
-			setRoom(JSON.parse(data.msg));
-		},
-	});
-	useEffect(() => {
-		// 如果传递过来的state为空，则请求数据
-		if (!room) {
-			run({});
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [state]);
+	const width = useImgWidth(); // 获取图片的宽度
+	const { loading, room, errorComponent } = useRoom(); // 获取房间数据
+	useTitle(room !== undefined ? room.name : ''); // 修改标题
 
-	/**
-	 * 修改标题
-	 */
-	useTitle(room !== undefined ? room.name : '');
-
+	if (errorComponent) {
+		return <>{errorComponent}</>;
+	}
 	return (
 		<div className={style.container}>
 			{loading || !room ? (
-				<span>loading</span>
+				<Spin size='large' className={style.loading}></Spin>
 			) : (
 				<>
 					<div className={style.img}>
@@ -88,31 +40,43 @@ const RoomComponent: React.FC<IPros> = (props) => {
 					<Divider />
 					<div className={style.infoContainer}>
 						<div>
-							<Title level={4} type='danger'>
-								{room?.housetype}
-							</Title>
 							<Text type='secondary'>户型</Text>
+							<Title level={4} type='danger'>
+								{room.housetype}
+							</Title>
 						</div>
 						<div>
-							<Title level={4} type='danger'>
-								{room?.area}m<sup>2</sup>
-							</Title>
 							<Text type='secondary'>面积</Text>
+							<Title level={4} type='danger'>
+								{room.area}m<sup>2</sup>
+							</Title>
 						</div>
 						<div>
-							<Title level={4} type='danger'>
-								{room?.dir}
-							</Title>
 							<Text type='secondary'>朝向</Text>
+							<Title level={4} type='danger'>
+								{room.dir}
+							</Title>
 						</div>
 					</div>
 					<Divider />
 					<div className={style.tags}>
-						{splitTags(room?.tags as string).map((tag, index) => (
+						{splitTags(room.tags as string).map((tag, index) => (
 							<Tag key={index} color='blue'>
 								{tag}
 							</Tag>
 						))}
+					</div>
+					<Divider />
+					<div>
+						<h3>户型特色</h3>
+						<p>
+							此房间小巧精致，价格低廉，温馨的风格设计让房间又多了一份情调
+						</p>
+					</div>
+					<Divider />
+					<div>
+						<h3>房源简介</h3>
+						<div>icons</div>
 					</div>
 				</>
 			)}
