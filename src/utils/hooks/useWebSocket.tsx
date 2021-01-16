@@ -29,8 +29,7 @@ function useWebSocket(socketUrl: string, handleMessage: (data: any) => void) {
 			}
 		};
 		wsRef.current.onmessage = (e) => {
-			const data = JSON.parse(e.data);
-			handleMessage(data);
+			handleMessage(e.data);
 		};
 		return () => {
 			if (wsRef.current) {

@@ -1,66 +1,115 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
-import { Modal } from 'antd';
-import { Chat as ChatComponent } from '../../../components';
+import React, { memo, useCallback, useRef } from 'react';
+import { Modal, Tooltip, Badge } from 'antd';
+import {
+	Chat as ChatComponent,
+	A,
+	IChatImperativeHandle,
+} from '../../../components';
 import { websocketBaseURL } from '../../../config';
 import { useWebSocket, isIntNumber } from '../../../utils';
 import { useUserStore } from '../../../store/userRedcer/dispatch';
-import { NavLink } from 'react-router-dom';
+import useModal from './useModal';
+import style from './index.module.scss';
+import useUnread from './useUnread';
 
 interface IPros {}
 const defaultProps = {};
 const Chat: React.FC<IPros> = (props) => {
-	const [visible, setVisible] = useState<boolean>(false); // 是否显示聊天界面
 	const userStore = useUserStore();
-	// 连接聊天服务器
-	// disable: 如果连接聊天服务器失败就为true
-	const { disable } = useWebSocket(
+	const chatRef = useRef<IChatImperativeHandle>(null);
+	const isRole = isIntNumber(userStore.roleid); // 是否为管理员
+
+	// 控制modal的开关
+	const { visible, openModal, closeModal } = useModal();
+
+	/**
+	 * 管理unread未读信息
+	 */
+	const { unread, increment, clearUnread } = useUnread();
+
+	/**
+	 * 连接聊天服务器
+	 */
+	const { disable, sendContent: websocketSendContent } = useWebSocket(
 		`${websocketBaseURL}/${userStore.token}`,
-		() => {}
-	);
-
-	// 打开聊天界面
-	const handelOpen = useCallback(
-		(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-			e.preventDefault();
-			setVisible(true);
-		},
-		[]
-	);
-	// 取消聊天界面
-	const handleCancel = useCallback(() => {
-		setVisible(false);
-	}, []);
-
-	// button选项
-	const buttonOptions = useMemo<{
-		text: string;
-		disabled: boolean;
-	}>(() => {
-		// 管理员
-		if (isIntNumber(userStore.roleid)) {
-			return {
-				text: '管理员无法使用后该功能',
-				disabled: true,
-			};
+		(data) => {
+			// 接收到的聊天信息
+			if (typeof data === 'string') {
+				// 如果来哦天窗口已经打开 ， 追加到聊天信息
+				if (visible && chatRef.current) {
+					chatRef.current.appendChat(data);
+				}
+				// 聊天窗口是关闭的状态 ， 更新未读信息
+				else {
+					// 设置未读信息
+					increment();
+				}
+			}
 		}
-		// 是否连接失败
-		return {
-			text: disable ? '连接聊天服务器失败' : '发送',
-			disabled: disable,
-		};
-	}, [disable, userStore.roleid]);
+	);
 
+	/**
+	 * 发送聊天内容
+	 */
+	const sendContent = useCallback(
+		(content: string) => {
+			if (chatRef.current) {
+				// 发送到聊天服务器
+				// 对于用户发送，后台会根据token解析得到userid
+				// 所以这里传递任意值即可
+				websocketSendContent(0, content);
+				chatRef.current.appendChat(content, false);
+			}
+		},
+		[websocketSendContent]
+	);
+
+	/**
+	 * 打开modal
+	 */
+	const handleClick = useCallback(
+		(e: React.UIEvent) => {
+			e.preventDefault();
+			clearUnread();
+			openModal();
+		},
+		[openModal, clearUnread]
+	);
+
+	/**
+	 * 渲染1: 管理员无法使用该功能
+	 */
+	if (isRole) {
+		return (
+			<Tooltip title='管理员无法使用' placement='bottom'>
+				<span
+					style={{
+						display: 'inline-block',
+					}}>
+					<A disable={true}>联系客服</A>
+				</span>
+			</Tooltip>
+		);
+	}
+
+	/**
+	 * 渲染2: 正常使用 or 连接失败
+	 */
+	// onClick={openModal}
 	return (
 		<>
-			<NavLink to='' onClick={handelOpen}>
-				联系客服
-			</NavLink>
+			<div className={style.badge} onClick={handleClick}>
+				<Badge count={unread}>
+					<A>联系客服</A>
+				</Badge>
+			</div>
 			<Modal
 				title='客服'
 				visible={visible}
 				footer={[]}
-				onCancel={handleCancel}>
+				onCancel={closeModal}>
 				<ChatComponent
+					ref={chatRef}
 					style={{
 						maxHeight: '500px',
 					}}
@@ -68,8 +117,9 @@ const Chat: React.FC<IPros> = (props) => {
 					userid={3}
 					username={userStore.username}
 					buttonOptions={{
-						...buttonOptions,
-						callback: () => {},
+						text: disable ? '连接聊天服务器失败' : '发送',
+						disabled: disable,
+						callback: sendContent,
 					}}
 				/>
 			</Modal>

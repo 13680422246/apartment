@@ -24,8 +24,10 @@
 }
 // 用户右边的时间
 .time {
-	font-size: 0.9rem;
+	color: gray;
+	font-size: 12px;
 	font-weight: lighter;
+	opacity: 0.8;
 }
 .right {
 	display: flex;

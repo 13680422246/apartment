@@ -1,8 +1,8 @@
 import Axios from 'axios';
-import { baseURL } from '../config';
+import { baseURL } from '../../config';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { store } from '../store';
-import { Hint, HintOptions } from '../components';
+import { store } from '../../store';
+import { Hint, HintOptions } from '../../components';
 import Qs from 'qs';
 
 const proxy = Axios.create({
