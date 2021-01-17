@@ -1,4 +1,4 @@
-import { useRequest } from '../../../utils';
+import { useRequest } from '../../../js';
 import { IActionPopconfirm } from '../../../components/EditableTableForm/render/renderPopconfirm';
 
 function useDelete(url: string) {

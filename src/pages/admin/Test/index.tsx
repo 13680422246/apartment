@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { Button, Space } from 'antd';
 import style from './index.module.scss';
-import { useRequest, useTitle } from '../../../utils';
+import { useRequest, useTitle } from '../../../js';
 import { HintOptions } from '../../../components';
 
 interface IPros {}

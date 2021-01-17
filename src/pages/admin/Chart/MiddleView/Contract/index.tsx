@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CommonCard from '../components/CommonCard';
-import { useChart, useRequest } from '../../../../../utils';
+import { useChart, useRequest } from '../../../../../js';
 import moment from 'moment';
 
 const Contract = () => {

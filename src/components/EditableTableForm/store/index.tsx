@@ -1,4 +1,4 @@
-import { generateStore } from '../../../utils';
+import { generateStore } from '../../../js';
 import { ITableForm, defaultState } from './state';
 import { IDispatchType, reducer } from './action';
 

@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { IFriend } from '../useFriends';
 import style from './index.module.scss';
-import { localeMoment } from '../../../../utils';
+import { localeMoment } from '../../../../js';
 import { Badge } from 'antd';
 
 interface IPros {

@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { useTitle } from '../../../utils';
+import { useTitle } from '../../../js';
 import { Image, Divider, Tag, Typography, Spin } from 'antd';
 import style from './index.module.scss';
 import { baseURL } from '../../../config';

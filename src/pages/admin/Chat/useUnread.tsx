@@ -1,4 +1,4 @@
-import { useRequest } from '../../../utils';
+import { useRequest } from '../../../js';
 
 function useUnread() {
 	/**

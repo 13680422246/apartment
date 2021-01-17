@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { useTitle } from '../../../utils';
+import { useTitle } from '../../../js';
 
 interface IPros {}
 const defaultProps = {};

@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import TopView from './TopView';
 import MiddleView from './MiddleView';
 import Report from './Report';
-import { useTitle } from '../../../utils';
+import { useTitle } from '../../../js';
 
 interface IPros {}
 const Chart: React.FC<IPros> = (props) => {

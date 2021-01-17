@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useMemo } from 'react';
 import { Button, Form, Space, Table } from 'antd';
-import { useRequest } from '../../utils';
+import { useRequest } from '../../js';
 import EditableCell from './render/EditableCell';
 import { Provider } from './store';
 import { useSelector } from './store';

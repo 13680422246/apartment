@@ -1,4 +1,4 @@
-import { useRequest } from '../../../utils';
+import { useRequest } from '../../../js';
 import { IActionSave } from '../../../components/EditableTableForm/render/renderEdit';
 
 function useEdit(url: string): IActionSave {

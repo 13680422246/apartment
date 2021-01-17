@@ -6,7 +6,7 @@ import {
 	IChatImperativeHandle,
 } from '../../../components';
 import { websocketBaseURL } from '../../../config';
-import { useWebSocket, isIntNumber } from '../../../utils';
+import { useWebSocket, isIntNumber } from '../../../js';
 import { useUserStore } from '../../../store/userRedcer/dispatch';
 import useModal from './useModal';
 import style from './index.module.scss';

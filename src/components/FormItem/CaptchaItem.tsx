@@ -1,7 +1,7 @@
 import { Col, Form, Image, Input, Row, Spin } from 'antd';
 import { Rule } from 'antd/lib/form';
 import React, { memo } from 'react';
-import { useCheckCodeURL } from '../../utils';
+import { useCheckCodeURL } from '../../js';
 
 interface IPros {
 	name?: string;

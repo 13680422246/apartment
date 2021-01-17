@@ -2,7 +2,7 @@ import React, { memo, lazy, Suspense } from 'react';
 import { Layout, Spin } from 'antd';
 import MyHeader from './Header';
 import { Route, Switch } from 'react-router-dom';
-import { useTitle } from '../../utils';
+import { useTitle } from '../../js';
 
 const Login = lazy(() => import('../login'));
 const Regiser = lazy(() => import('../register'));

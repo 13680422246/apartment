@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useRequest } from '../../utils';
+import { useRequest } from '../../js';
 import moment from 'moment';
 
 /**

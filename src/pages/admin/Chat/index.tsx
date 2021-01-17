@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useRef, useState } from 'react';
-import { useTitle, useWebSocket } from '../../../utils';
+import { useTitle, useWebSocket } from '../../../js';
 import useFriends, { IFriend } from './useFriends';
 import style from './index.module.scss';
 import {

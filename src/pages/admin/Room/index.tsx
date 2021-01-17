@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { useTitle } from '../../../utils';
+import { useTitle } from '../../../js';
 import TableForm from '../../../components/EditableTableForm';
 import columns from './columns';
 
