@@ -15,9 +15,11 @@ import {
 const Role = lazy(() => import('../pages/admin/Role'));
 const Permission = lazy(() => import('../pages/admin/Permission'));
 const Chart = lazy(() => import('../pages/admin/Chart'));
-const Chat = lazy(() => import('../pages/admin/Chat'));
-const Test = lazy(() => import('../pages/admin/Test'));
-const Room = lazy(() => import('../pages/admin/Room'));
+const Chat = lazy(() => import('../pages/admin/Chat')); // 聊天
+const Test = lazy(() => import('../pages/admin/Test')); // 定时任务
+const Room = lazy(() => import('../pages/admin/Room')); // 房间管理
+const Roomer = lazy(() => import('../pages/admin/Roomer')); // 房客管理
+const Staff = lazy(() => import('../pages/admin/Staff')); // 员工管理
 
 const routers: {
 	[propName: string]: {
@@ -51,11 +53,11 @@ const routers: {
 	},
 	'/admin/staff': {
 		icon: <UserOutlined />,
-		component: null,
+		component: Staff,
 	},
 	'/admin/roomer': {
 		icon: <UserOutlined />,
-		component: null,
+		component: Roomer,
 	},
 	'/admin/chart': {
 		icon: <LineChartOutlined />,

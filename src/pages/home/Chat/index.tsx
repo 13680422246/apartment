@@ -6,9 +6,8 @@ import {
 	IChatImperativeHandle,
 } from '../../../components';
 import { websocketBaseURL } from '../../../config';
-import { useWebSocket, isIntNumber } from '../../../js';
+import { useWebSocket, isIntNumber, useToggle } from '../../../js';
 import { useUserStore } from '../../../store/userRedcer/dispatch';
-import useModal from './useModal';
 import style from './index.module.scss';
 import useUnread from './useUnread';
 
@@ -20,7 +19,7 @@ const Chat: React.FC<IPros> = (props) => {
 	const isRole = isIntNumber(userStore.roleid); // 是否为管理员
 
 	// 控制modal的开关
-	const { visible, openModal, closeModal } = useModal();
+	const { visible, toggle } = useToggle();
 
 	/**
 	 * 管理unread未读信息
@@ -71,9 +70,9 @@ const Chat: React.FC<IPros> = (props) => {
 		(e: React.UIEvent) => {
 			e.preventDefault();
 			clearUnread();
-			openModal();
+			toggle();
 		},
-		[openModal, clearUnread]
+		[toggle, clearUnread]
 	);
 
 	/**
@@ -103,11 +102,7 @@ const Chat: React.FC<IPros> = (props) => {
 					<A>联系客服</A>
 				</Badge>
 			</div>
-			<Modal
-				title='客服'
-				visible={visible}
-				footer={[]}
-				onCancel={closeModal}>
+			<Modal title='客服' visible={visible} footer={[]} onCancel={toggle}>
 				<ChatComponent
 					ref={chatRef}
 					style={{

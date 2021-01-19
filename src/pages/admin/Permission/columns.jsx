@@ -10,10 +10,6 @@ const columns = [
 				message: `角色名称不能为空`,
 			},
 		],
-		sorter: {
-			compare: (a, b) => a.name.localeCompare(b.name),
-			multiple: 3,
-		},
 		search: true,
 	},
 	{
@@ -21,10 +17,6 @@ const columns = [
 		dataIndex: 'url',
 		width: '30%',
 		editable: true,
-		sorter: {
-			compare: (a, b) => a.url.localeCompare(b.url),
-			multiple: 3,
-		},
 		rules: [
 			{
 				required: true,

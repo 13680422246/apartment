@@ -10,5 +10,7 @@ export { default as generateStore } from './generateStore'; // 生成store
 export { default as localeMoment } from './moment'; // moment的本地化
 export { default as isIntNumber } from './isIntNumber'; // 判断一个字符串是否为整数
 export { default as usePermission } from './hooks/usePermission'; // 权限管理、渲染路由、渲染侧边栏
+export { default as useToggle } from './hooks/useToggle';
+export { default as classNames } from './classNames'; // classnames包
 
 export type { ISideItem } from './hooks/usePermission';

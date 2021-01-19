@@ -58,11 +58,16 @@ const EditableTableForm: React.FC<IPros> = memo(
 		>(props.fetchUrl, {
 			onSuccess: ({ data }) => {
 				if (dispatch) {
+					// 取消编辑状态
+					dispatch.setEditingKey('');
+					// 设置分页数据
 					dispatch.setPagination({
 						current: data.pageNum,
 						pageSize: data.pageSize,
 						total: data.total,
 					});
+					// 处理请求数据
+					// 这里交给用户去处理，因为每个table处理数据的方式可能不一样
 					props.handleFetchData({
 						datasource: data.list,
 						emit: (datasource) => {
@@ -72,10 +77,6 @@ const EditableTableForm: React.FC<IPros> = memo(
 				}
 			},
 		});
-		useEffect(() => {
-			handleReset(); // 重置条件
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, []);
 
 		/**
 		 * 刷新页面 - 重新请求数据
@@ -94,17 +95,25 @@ const EditableTableForm: React.FC<IPros> = memo(
 		 * 重置条件 - 删除筛选、排序
 		 */
 		const handleReset = () => {
+			// 删除排序和筛选
+			dispatch.setFilterAndSorter([], []);
+			// 删除搜索内容
+			dispatch.setSearchText('');
 			run({
 				current: 1,
 				pageSize: props.defaultPageSize as number,
 			});
 		};
 
+		useEffect(() => {
+			handleReset(); // 重置条件
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, []);
+
 		/**
 		 * onChnage
 		 */
 		const handleChange = (pagination: any, filters: any, sorter: any) => {
-			console.info(`change table`);
 			if (dispatch) {
 				// 取消编辑状态
 				dispatch.setEditingKey('');

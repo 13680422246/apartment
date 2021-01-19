@@ -8,6 +8,8 @@ export { default as RoomCard } from './RoomCard';
 export { default as FormModal } from './FormModal';
 export { default as A } from './A';
 export { default as Chat } from './Chat';
+export { default as Tag } from './Tag';
+export { default as HiddenField } from './HiddenField';
 export type { Handle as IChatImperativeHandle } from './Chat';
 export type { MinAndMax } from './FilterSlider';
 export type { Handle } from './Modal';
