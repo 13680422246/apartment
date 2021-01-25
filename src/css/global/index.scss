@@ -3,6 +3,7 @@
  * 作者: 苏柏良
  * 时间: 2021-01-17
  */
+@import './variable.scss';
 // 屏幕全屏显式
 html,
 body,
@@ -18,7 +19,7 @@ body,
 }
 // 白色文本
 .text {
-	color: white !important;
+	color: var(--text-color) !important;
 }
 // 文本居中
 .text-align {

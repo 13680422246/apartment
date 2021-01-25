@@ -27,6 +27,9 @@ function isJson(data: any): boolean {
  */
 function classNames(this: any, ...args: IClassname[] | IClassname[][]): string {
 	let res: string[] = [];
+	/**
+	 * 对参数的处理
+	 */
 	for (const arg of args) {
 		// type is string
 		if (typeof arg === 'string') {
@@ -39,7 +42,7 @@ function classNames(this: any, ...args: IClassname[] | IClassname[][]): string {
 			res.push(temp);
 		}
 		// type is Object
-		else {
+		else if (isJson(arg)) {
 			for (const classname in arg) {
 				if (Object.prototype.hasOwnProperty.call(arg, classname)) {
 					const isPush = arg[classname];

@@ -1,11 +1,14 @@
 import React, { memo } from 'react';
-import { useTitle } from '../../../js';
+import { useTitle, classNames } from '../../../js';
+import style from './index.module.scss';
 
 interface IPros {}
 const defaultProps = {};
 const UserCenter: React.FC<IPros> = (props) => {
 	useTitle('用户中心'); // 修改title
-	return <div>userCenter</div>;
+	return (
+		<div className={classNames.call(style, 'userCenter')}>userCenter</div>
+	);
 };
 UserCenter.defaultProps = defaultProps;
 export default memo(UserCenter);
