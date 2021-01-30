@@ -1,18 +1,27 @@
+// comon css
+%border--right {
+	border-right: 1px solid gray;
+}
+// 容器
 .container {
 	display: flex;
 	height: 100%;
-}
-
-// 朋友列表的css
-.friends {
-	width: 300px;
-	height: 100%;
-	border-right: 1px solid gray;
-	overflow-y: auto;
-	cursor: pointer;
-}
-// 聊天页面的css
-.chat {
-	width: calc(100% - 300px);
-	height: 100%;
+	// 左侧的朋友列表
+	.friends--left {
+		width: 300px;
+		height: 100%;
+		@extend %border--right;
+		overflow-y: auto;
+		cursor: pointer;
+	}
+	// 中间的租客信息
+	.info--middle {
+		width: 300px;
+		@extend %border--right;
+	}
+	// 右侧的聊天界面
+	.chat--right {
+		width: calc(100% - 600px);
+		height: 100%;
+	}
 }

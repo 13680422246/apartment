@@ -13,6 +13,7 @@ export interface IFriend {
 	unread: number;
 	lasttime: string;
 	lastContent: string;
+	isFinishInfo: boolean; // 是否完善好用户信息
 }
 function useFriends() {
 	const [friends, setFriends] = useState<IFriend[]>([]); // 朋友列表

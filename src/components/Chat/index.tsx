@@ -66,7 +66,7 @@ const Chat = React.forwardRef<Handle, IPros>((props, ref) => {
 		});
 	}, [form, props.buttonOptions]);
 
-	const isShow = chats.length === 0;
+	const isShow = chats.length === 0 && loadMoreLoading;
 	return (
 		<div className={style.container}>
 			<div style={props.style} className={style.header} ref={scroll}>
