@@ -21,6 +21,7 @@ const Room = lazy(() => import('../pages/admin/Room')); // 房间管理
 const Roomer = lazy(() => import('../pages/admin/Roomer')); // 房客管理
 const Staff = lazy(() => import('../pages/admin/Staff')); // 员工管理
 const Subscribe = lazy(() => import('../pages/admin/Subscribe')); // 预约管理
+const Contract = lazy(() => import('../pages/admin/Contract')); // 合同管理
 
 const routers: {
 	[propName: string]: {
@@ -46,7 +47,7 @@ const routers: {
 	},
 	'/admin/contract': {
 		icon: <DatabaseOutlined />,
-		component: null,
+		component: Contract,
 	},
 	'/admin/maintain': {
 		icon: <ToolOutlined />,
