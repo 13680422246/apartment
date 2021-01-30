@@ -1,7 +1,7 @@
 import { useRequest } from '../../../js';
 import { IActionSave } from '../../../components/EditableTableForm/render/renderEdit';
 
-function useEdit(url: string): IActionSave {
+function useEdit(url: string, title: string = '编辑'): IActionSave {
 	const { run: editRun } = useRequest<
 		{
 			type: 'success' | 'error';
@@ -25,7 +25,7 @@ function useEdit(url: string): IActionSave {
 	});
 
 	return {
-		title: '编辑',
+		title: title,
 		dataIndex: 'edit',
 		editor: {
 			callback: ({

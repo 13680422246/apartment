@@ -64,14 +64,6 @@ const columns = [
 			},
 		],
 	},
-	{
-		title: '编辑工资',
-		dataIndex: 'edit',
-	},
-	{
-		title: '解雇',
-		dataIndex: 'delete',
-	},
 ];
 
 export default columns;
