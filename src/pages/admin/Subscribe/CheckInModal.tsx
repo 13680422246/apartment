@@ -69,16 +69,20 @@ const CheckInModal: React.FC<IPros> = (props) => {
 					),
 					remark: rows.remark,
 					durationtime: 1,
-				}).then(() => {
-					dispatch.setLoading(false);
-					dispatch.setData((datasource: any[]) => {
-						const newData = [...datasource];
-						const index = newData.findIndex(
-							(item) => item.id === props.record.id
-						);
-						newData[index].status = '1';
-						return newData;
-					});
+				}).then((res) => {
+					if (res && res.running) {
+						dispatch.setLoading(false);
+						if (res.data && res.data.type === 'success') {
+							dispatch.setData((datasource: any[]) => {
+								const newData = [...datasource];
+								const index = newData.findIndex(
+									(item) => item.id === props.record.id
+								);
+								newData[index].status = '1';
+								return newData;
+							});
+						}
+					}
 				});
 			} catch (e) {
 				dispatch.setLoading(false);
