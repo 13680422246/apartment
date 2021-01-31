@@ -1,4 +1,5 @@
 import { HiddenField } from '../../../components';
+import Employ from './Employ';
 const columns = [
 	{
 		title: '用户ID',
@@ -51,6 +52,11 @@ const columns = [
 			multiple: 3,
 		},
 		render: (text, record) => <HiddenField text={text} />,
+	},
+	{
+		title: '雇佣',
+		dataIndex: 'employ',
+		render: (text, record) => <Employ record={record} />,
 	},
 ];
 

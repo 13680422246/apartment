@@ -16,7 +16,8 @@ const proxy = Axios.create({
 	transformRequest: [
 		function (data) {
 			// 如果token存在的话，带上token
-			const token = store.getState().user.token;
+			const user = store.getState().user;
+			const token = (user && user.token) || '';
 			if (token) {
 				data['token'] = token;
 			}
