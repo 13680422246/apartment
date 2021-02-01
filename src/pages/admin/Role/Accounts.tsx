@@ -32,8 +32,10 @@ const Accounts: React.FC<IPros> = (props) => {
 				visible={visible}
 				onCancel={toggle}
 				footer={[]}>
-				{props.accounts.map((name) => (
-					<Tag closable={false}>{name}</Tag>
+				{props.accounts.map((name, index) => (
+					<Tag closable={false} key={index}>
+						{name}
+					</Tag>
 				))}
 			</Modal>
 		</>
