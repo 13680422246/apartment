@@ -1,5 +1,11 @@
-.disabled {
-	pointer-events: none;
-	opacity: 0.5;
-	color: gray;
+.a {
+	&--active {
+		cursor: pointer;
+		color: var(--a--color);
+	}
+	&--disabled {
+		pointer-events: none;
+		opacity: 0.5;
+		color: gray;
+	}
 }

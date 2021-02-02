@@ -1,6 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 import { NavLink } from 'react-router-dom';
+import ReletModal from './ReletModal';
+import Exit from './Exit';
 
 const columns = [
 	{
@@ -61,14 +63,17 @@ const columns = [
 	{
 		title: '备注',
 		dataIndex: 'remark',
+		width: '200px',
 	},
 	{
 		title: '续租',
 		dataIndex: 'relet',
+		render: (text, record) => <ReletModal record={record} />,
 	},
 	{
 		title: '退租',
 		dataIndex: 'exit',
+		render: (text, record) => <Exit record={record} />,
 	},
 ];
 

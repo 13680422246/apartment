@@ -22,7 +22,7 @@ function useRequestCheckInForm() {
 			} else {
 				Hint({
 					type: 'success',
-					content: '入住成功',
+					content: '预约成功',
 				});
 			}
 		},

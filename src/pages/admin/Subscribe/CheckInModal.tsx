@@ -68,7 +68,7 @@ const CheckInModal: React.FC<IPros> = (props) => {
 						'YYYY-MM-DD'
 					),
 					remark: rows.remark,
-					durationtime: 1,
+					durationtime: rows.durationtime,
 				}).then((res) => {
 					if (res && res.running) {
 						dispatch.setLoading(false);
@@ -108,9 +108,6 @@ const CheckInModal: React.FC<IPros> = (props) => {
 							},
 						]}>
 						<InputNumber />
-					</Form.Item>
-					<Form.Item label='备注信息'>
-						<Input.TextArea rows={4}></Input.TextArea>
 					</Form.Item>
 				</Form>
 			</Modal>
