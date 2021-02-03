@@ -2,6 +2,10 @@ import { Image } from 'antd';
 import { baseURL } from '../../../config';
 const columns = [
 	{
+		title: '房间Id',
+		dataIndex: 'id',
+	},
+	{
 		title: '图片',
 		dataIndex: 'url',
 		width: '120px',

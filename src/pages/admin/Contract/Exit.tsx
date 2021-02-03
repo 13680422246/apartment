@@ -42,30 +42,21 @@ const Exit: React.FC<IPros> = (props) => {
 		run({
 			contractid: props.record.id,
 		}).then((res) => {
-			console.info(res);
-			if (res && res.running) {
-				// 处理数据
-				if (res.data && res.data.type === 'success') {
-					dispatch.setData((datasource) => {
-						console.info(`处理数据`); // 不知道为什么返回的是undefined
-						const newData = [...datasource];
-						const index = newData.findIndex(
-							(item) => item.id === props.record.id
-						);
-						if (index !== -1) {
-							newData[index].durationtime =
-								props.record.durationtime;
-							newData[index].remaintime = props.record.remaintime;
-							newData[index].reamrk = `${moment(
-								new Date()
-							).format('YYYY-MM-DD')}退租`;
-						}
-						return newData;
-					});
+			dispatch.setData((datasource) => {
+				const newData = [...datasource];
+				const index = newData.findIndex(
+					(item) => item.id === props.record.id
+				);
+				if (index !== -1) {
+					newData[index].durationtime = props.record.durationtime;
+					newData[index].remaintime = props.record.remaintime;
+					newData[index].reamrk = `${moment(new Date()).format(
+						'YYYY-MM-DD'
+					)}退租`;
 				}
-				console.info(`loading is false`);
-				dispatch.setLoading(false);
-			}
+				return newData;
+			});
+			dispatch.setLoading(false);
 		});
 	}, [
 		dispatch,

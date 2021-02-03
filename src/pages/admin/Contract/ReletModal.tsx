@@ -69,7 +69,7 @@ const ReletModal: React.FC<IPros> = (props) => {
 					setConfirmLoading(false);
 				});
 		},
-		[run]
+		[dispatch, run]
 	);
 	return (
 		<FormModal

@@ -140,6 +140,9 @@ function useRequest<ResDataType, ParamsType>(
 							values,
 						};
 					}
+					return {
+						running: false,
+					};
 				})
 				.catch((err: Error) => {
 					/**
