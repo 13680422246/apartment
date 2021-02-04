@@ -9,7 +9,10 @@ const Login = lazy(() => import('../login'));
 const Regiser = lazy(() => import('../register'));
 const HomeContent = lazy(() => import('./content'));
 const Room = lazy(() => import('./room'));
-const userCenter = lazy(() => import('./userCenter'));
+// 用户中心
+const UpdatePwd = lazy(() => import('./update-pwd'));
+const UserInfo = lazy(() => import('./user-info'));
+const Subscribe = lazy(() => import('./Subscribe'));
 
 const { Header, Content } = Layout;
 
@@ -31,11 +34,9 @@ const Home: React.FC = (props) => {
 						<Route path='/login' component={Login} exact />
 						<Route path='/register' component={Regiser} exact />
 						<Route path='/room/:id' component={Room} exact />
-						<Route
-							path='/usercenter'
-							component={userCenter}
-							exact
-						/>
+						<Route path='/user-info' component={UserInfo} exact />
+						<Route path='/update-pwd' component={UpdatePwd} exact />
+						<Route path='/Subscribe' component={Subscribe} exact />
 						<Route path='/' component={HomeContent} exact />
 					</Switch>
 				</Suspense>
