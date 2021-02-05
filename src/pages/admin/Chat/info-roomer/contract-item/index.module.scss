@@ -1,0 +1,20 @@
+%flex-layout {
+	display: flex;
+	justify-content: space-between;
+}
+%font-size {
+	font-size: 1rem;
+}
+.header {
+	@extend %font-size;
+	@extend %flex-layout;
+}
+.main {
+	@extend %font-size;
+	&__item {
+		@extend %flex-layout;
+	}
+}
+.remark {
+	font-weight: lighter;
+}
