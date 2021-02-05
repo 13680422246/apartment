@@ -1,17 +1,14 @@
 import React, { memo, useCallback } from 'react';
-import TableForm from '../../../components/EditableTableForm';
 import { useTitle } from '../../../js';
 import columns from './columns';
+import TableForm from '../../../components/EditableTableForm';
 
 interface IPros {}
-/**
- * 预约表单: 使用列表，无线加载即可
- */
-const Subscribe: React.FC<IPros> = (props) => {
-	const BaseUrl = '/home/subscribe';
+const Contract: React.FC<IPros> = (props) => {
+	const BaseUrl = '/home/contract';
 	const newColumns = [...columns] as any[];
 
-	useTitle('我的预约'); // 修改title
+	useTitle('我的合同');
 
 	// 处理加载的数据
 	const handleFetchData = useCallback(({ datasource, emit }) => {
@@ -26,4 +23,4 @@ const Subscribe: React.FC<IPros> = (props) => {
 		/>
 	);
 };
-export default memo(Subscribe);
+export default memo(Contract);

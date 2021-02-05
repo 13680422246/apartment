@@ -13,6 +13,7 @@ const Room = lazy(() => import('./room'));
 const UpdatePwd = lazy(() => import('./update-pwd'));
 const UserInfo = lazy(() => import('./user-info'));
 const Subscribe = lazy(() => import('./Subscribe'));
+const Contract = lazy(() => import('./Contract'));
 
 const { Header, Content } = Layout;
 
@@ -37,6 +38,7 @@ const Home: React.FC = (props) => {
 						<Route path='/user-info' component={UserInfo} exact />
 						<Route path='/update-pwd' component={UpdatePwd} exact />
 						<Route path='/Subscribe' component={Subscribe} exact />
+						<Route path='/Contract' component={Contract} exact />
 						<Route path='/' component={HomeContent} exact />
 					</Switch>
 				</Suspense>
