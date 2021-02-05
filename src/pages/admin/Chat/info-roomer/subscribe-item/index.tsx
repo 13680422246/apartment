@@ -1,9 +1,10 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import useUserSub from './useUserSub';
 import { Skeleton, Button } from 'antd';
 import moment from 'moment';
 import style from './index.module.scss';
 import { classNames } from '../../../../../js';
+import useCancelSub from './useCancelSub';
 
 const cls = classNames.bind(style);
 
@@ -12,6 +13,21 @@ interface IPros {
 }
 const SubscribeItem: React.FC<IPros> = (props) => {
 	const { loading, data } = useUserSub(props.userid);
+	const { cancel, cancelLoading } = useCancelSub();
+
+	/**
+	 * 取消预约
+	 */
+	const handleCancelSubscribe = useCallback(
+		(item: any) => {
+			cancel({
+				roomid: item.roomid,
+				userid: item.userid,
+			});
+		},
+		[cancel]
+	);
+
 	if (loading) {
 		return <Skeleton active loading={true} />;
 	}
@@ -56,7 +72,14 @@ const SubscribeItem: React.FC<IPros> = (props) => {
 								<span>备注:</span>
 								<span>{item.remark}</span>
 							</div>
-							<Button block>取消预约订单</Button>
+							<Button
+								block
+								loading={cancelLoading}
+								onClick={() => {
+									handleCancelSubscribe(item);
+								}}>
+								取消预约订单
+							</Button>
 						</div>
 						<hr hidden={index === list.length - 1} />
 					</div>
