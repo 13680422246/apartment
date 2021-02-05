@@ -10,6 +10,7 @@ export { default as A } from './A';
 export { default as Chat } from './Chat';
 export { default as Tag } from './Tag';
 export { default as HiddenField } from './HiddenField';
+export { default as MyUpload } from './MyUpload';
 export type { Handle as IChatImperativeHandle } from './Chat';
 export type { MinAndMax } from './FilterSlider';
 export type { Handle } from './Modal';

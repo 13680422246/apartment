@@ -2,8 +2,10 @@ import React, { memo, useCallback } from 'react';
 import { useTitle } from '../../../js';
 import TableForm from '../../../components/EditableTableForm';
 import columns from './columns';
-import useEdit from '../utils/useEdit';
 import useDelete from '../utils/useDelete';
+import usePostRoom from './usePostRoom';
+import AddModal from './addModal';
+import { Button } from 'antd';
 
 interface IPros {}
 const defaultProps = {};
@@ -18,7 +20,7 @@ const Room: React.FC<IPros> = (props) => {
 	}, []);
 
 	// TODO: 房间的上传优点特殊，需要DataForm
-	const editColumn = useEdit(`${BaseUrl}/edit`);
+	const editColumn = usePostRoom(`${BaseUrl}/edit`);
 	newColumns.push(editColumn);
 
 	// 删除数据
@@ -27,6 +29,12 @@ const Room: React.FC<IPros> = (props) => {
 
 	return (
 		<TableForm
+			modal={
+				<AddModal
+					component={
+						<Button type='primary'>添加房间</Button>
+					}></AddModal>
+			}
 			fetchUrl={`${BaseUrl}/findAll`}
 			columns={newColumns}
 			handleFetchData={handleFetchData}

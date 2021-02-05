@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { Input, InputNumber, Form } from 'antd';
 import { useSelector } from '../store';
+import EditUpload from '../../EditUpload';
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
@@ -54,7 +55,14 @@ const EditableCell: React.FC<EditableCellProps> = (props) => {
 			);
 			break;
 		case 'image':
-			inputNode = <>编辑上传组件</>;
+			inputNode = (
+				<EditUpload
+					style={{
+						margin: 0,
+					}}
+					record={record}
+				/>
+			);
 			break;
 		default:
 			inputNode = (
