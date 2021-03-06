@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import { Button, Form, Space, Table } from 'antd';
 import { useRequest } from '../../js';
 import EditableCell from './render/EditableCell';
@@ -10,6 +10,7 @@ import renderEdit from './render/renderEdit';
 import renderSearch from './render/renderSearch';
 import parseParams from './parseParams';
 import A from '../A';
+import { stat } from 'fs';
 
 export interface PageInfo {
 	hasNextPage: boolean;
@@ -111,22 +112,45 @@ const EditableTableForm: React.FC<IPros> = memo(
 		}, []);
 
 		/**
-		 * onChnage
+		 * onChange
 		 */
-		const handleChange = (pagination: any, filters: any, sorter: any) => {
-			if (dispatch) {
-				// 取消编辑状态
-				dispatch.setEditingKey('');
-				// 设置筛选和排序
-				dispatch.setFilterAndSorter(filters, sorter);
-				// 重新请求数据
-				// 注意: 将defaultPageSize恢复到默认的
+		useEffect(() => {
+			// run({
+			//     ...parseParams(state.pagination, statefilters, sorter),
+			//     pageSize: props.defaultPageSize as number,
+			// });
+			console.info('列', state.searchedColumn);
+			console.info('搜索文本', state.searchText);
+			if (state.searchText !== '') {
+				// 删除排序和筛选
+				dispatch.setFilterAndSorter([], []);
 				run({
-					...parseParams(pagination, filters, sorter),
+					current: 1,
 					pageSize: props.defaultPageSize as number,
+					filters: {
+						[state.searchedColumn]: state.searchText,
+					},
 				});
 			}
-		};
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [state.searchText, state.searchedColumn]);
+		const handleChange = useCallback(
+			(pagination: any, filters: any, sorter: any) => {
+				if (dispatch) {
+					// 取消编辑状态
+					dispatch.setEditingKey('');
+					// 设置筛选和排序
+					dispatch.setFilterAndSorter(filters, sorter);
+					// 重新请求数据
+					// 注意: 将defaultPageSize恢复到默认的
+					run({
+						...parseParams(pagination, filters, sorter),
+						pageSize: props.defaultPageSize as number,
+					});
+				}
+			},
+			[dispatch, props.defaultPageSize, run]
+		);
 
 		/**
 		 * 合并列对象
