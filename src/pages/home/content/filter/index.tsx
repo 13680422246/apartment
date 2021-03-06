@@ -18,7 +18,7 @@ const collapse: React.CSSProperties = {
 	position: 'fixed',
 	left: 0,
 	right: 0,
-	top: '64px',
+	top: '60px',
 	zIndex: 200,
 	boxShadow: '0 1px 0 rgb(0 0 0 / 10%)',
 };

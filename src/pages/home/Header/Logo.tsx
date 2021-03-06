@@ -22,17 +22,6 @@ const IconLogo: React.FC<{
 	};
 	return <span onClick={handleClick}>{props.icon}</span>;
 };
-const GoBackLogo: React.FC<{}> = (props) => {
-	const history = useHistory();
-	const handleClick = () => {
-		history.goBack();
-	};
-	return (
-		<span onClick={handleClick}>
-			<LeftOutlined />
-		</span>
-	);
-};
 
 interface IPros {
 	title: React.ReactNode; // 首页标题
@@ -41,34 +30,27 @@ interface IPros {
 const defaultProps = {};
 const Logo: React.FC<IPros> = (props) => {
 	const screens = useBreakpoint();
-	const location = useLocation();
 	const [logo, setLogo] = useState<'text' | 'logo' | 'goback'>('text');
 
 	/**
 	 * 在text and logo之间切换
 	 */
 	useEffect(() => {
-		const { pathname } = location;
-		if (pathname === '/') {
-			setLogo('text');
-			if (screens.xs) {
-				setLogo('logo');
-			}
+		if (screens.xs) {
+			setLogo('logo');
 		} else {
-			setLogo('goback');
+			setLogo('text');
 		}
-	}, [location, screens]);
+	}, [screens]);
 
 	const getLogo = () => {
 		switch (logo) {
 			case 'text':
 				return <TextLogo text={props.title} />;
-			case 'goback':
-				return <GoBackLogo />;
 			case 'logo':
 				return <IconLogo icon={props.icon} />;
 			default:
-				throw new Error('Logo.tsx - 没有这个组件');
+				return <IconLogo icon={props.icon} />;
 		}
 	};
 	return <div>{getLogo()}</div>;

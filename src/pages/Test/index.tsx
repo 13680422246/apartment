@@ -1,15 +1,25 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback, useRef } from 'react';
 // import moment from 'moment';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
 
 interface IPros {}
 const defaultProps = {};
-const index: React.FC<IPros> = (props) => {
-	// const time = moment(new Date().toString()).format('YYYY-mm-dd');
+interface IFriend {
+	name: string;
+}
+const Index: React.FC<IPros> = (props) => {
+	const ref = useRef<IFriend>();
+	const handleClick = useCallback(() => {
+		ref.current = {
+			name: 'asdqwe',
+		};
+	}, []);
+
 	return (
 		<>
 			<Swiper
+				onClick={handleClick}
 				spaceBetween={50}
 				slidesPerView={1}
 				onSlideChange={() => console.log('slide change')}
@@ -22,5 +32,5 @@ const index: React.FC<IPros> = (props) => {
 		</>
 	);
 };
-index.defaultProps = defaultProps;
-export default memo(index);
+Index.defaultProps = defaultProps;
+export default memo(Index);

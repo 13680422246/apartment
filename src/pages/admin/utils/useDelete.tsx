@@ -1,7 +1,14 @@
-import { useRequest } from '../../../utils';
+import { useRequest } from '../../../js';
 import { IActionPopconfirm } from '../../../components/EditableTableForm/render/renderPopconfirm';
 
-function useDelete(url: string) {
+function useDelete(
+	url: string,
+	options = {
+		title: '删除',
+		text: '删除',
+		HintText: '确认删除?',
+	}
+) {
 	const { run: deleteRun } = useRequest<
 		{
 			type: 'success' | 'error';
@@ -26,11 +33,11 @@ function useDelete(url: string) {
 		},
 	});
 	let column: IActionPopconfirm = {
-		title: '删除',
+		title: options.title,
 		dataIndex: 'delete',
 		popconfirm: {
-			text: '删除',
-			HintText: '确认删除?',
+			text: options.text,
+			HintText: options.HintText,
 			callback: ({ record, setLoading, setData, data: datasource }) => {
 				setLoading(true);
 				deleteRun({

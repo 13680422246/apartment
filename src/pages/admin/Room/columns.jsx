@@ -1,6 +1,11 @@
 import { Image } from 'antd';
 import { baseURL } from '../../../config';
+import MaintainModal from './maintainModal';
 const columns = [
+	{
+		title: '房间Id',
+		dataIndex: 'id',
+	},
 	{
 		title: '图片',
 		dataIndex: 'url',
@@ -130,6 +135,7 @@ const columns = [
 	{
 		title: '维修',
 		dataIndex: 'maintain',
+		render: (text, record) => <MaintainModal record={record} />,
 	},
 ];
 

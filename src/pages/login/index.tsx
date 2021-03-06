@@ -3,7 +3,7 @@ import { Button, Col, Form, Row } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { CaptchaItem, PwdItem, UsernameItem } from '../../components';
 import style from './index.module.scss';
-import { useRequest, useTitle } from '../../utils';
+import { useRequest, useTitle } from '../../js';
 import {
 	useUserDispatch,
 	useLoginGoBack,

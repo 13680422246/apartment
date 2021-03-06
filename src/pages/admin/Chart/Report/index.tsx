@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Result, Card } from 'antd';
 import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
-import { useRequest } from '../../../../utils';
+import { useRequest } from '../../../../js';
 
 interface ResDataType {
 	profit: number; // 盈利情况

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useRequest } from '../../utils';
+import { useRequest } from '../../js';
+import moment from 'moment';
 
 /**
  * 管理聊天信息
@@ -70,9 +71,11 @@ function useChat(
 
 	/**
 	 * 追加内容到聊天信息
+	 * @param { string } content 聊天内容
+	 * @param { 'left' | 'right' } dir 添加的方向，默认添加到右边
 	 */
 	const appendChat = useCallback(
-		(content: string) => {
+		(content: string, isAdmin: boolean = true) => {
 			setChats((chats) => {
 				const newChats = [...chats];
 				newChats.push({
@@ -80,10 +83,7 @@ function useChat(
 					userid,
 					issend: isAdmin ? 0 : 1,
 					content,
-					// 服务器给的格式 vs new Date();
-					// 1608888260000
-					// 1610078732629
-					createtime: new Date().toString(),
+					createtime: moment().format('YYYY-MM-DD HH:mm:ss'),
 				});
 				return newChats;
 			});
@@ -93,7 +93,7 @@ function useChat(
 				scroll.current.scrollTop = height;
 			}
 		},
-		[isAdmin, scroll, userid]
+		[scroll, userid]
 	);
 
 	// 进入的时候加载一次数据

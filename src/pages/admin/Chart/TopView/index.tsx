@@ -2,7 +2,7 @@ import React, { useEffect, useState, createContext } from 'react';
 import { Row, Col } from 'antd';
 import TotalUser from './TotalUser';
 import TotalStaff from './TotalStaff';
-import { useRequest } from '../../../../utils';
+import { useRequest } from '../../../../js';
 
 interface ITopviewData {
 	staffNum: string;

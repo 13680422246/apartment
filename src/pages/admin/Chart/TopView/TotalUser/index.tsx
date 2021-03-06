@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import CommonCard from '../components/CommonCard';
 import { TopViewProvider } from '../index';
-import { useChart } from '../../../../../utils';
+import { useChart } from '../../../../../js';
 
 const TotalUser: React.FC<{}> = (props) => {
 	const chartDom = useRef<HTMLDivElement>(null); // 图表的ref对象

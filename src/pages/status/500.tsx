@@ -1,10 +1,12 @@
 import React from 'react';
 import { Result, Button } from 'antd';
 import { NavLink } from 'react-router-dom';
+import { useTitle } from '../../js';
 
 const NotFount: React.FC<{
 	url: string;
 }> = (props) => {
+	useTitle('500');
 	return (
 		<Result
 			status='500'

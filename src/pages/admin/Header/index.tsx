@@ -6,7 +6,7 @@ import {
 	useUserDispatch,
 	useNotAdminThenGoBack,
 } from '../../../store/userRedcer/dispatch';
-import { useRequest } from '../../../utils';
+import { useRequest } from '../../../js';
 import { LoginOutlined } from '@ant-design/icons';
 
 interface IPros {}

@@ -1,3 +1,4 @@
+import Accounts from './Accounts';
 const columns = [
 	{
 		title: '角色名称',
@@ -34,11 +35,17 @@ const columns = [
 		search: true,
 	},
 	{
-		title: '授权管理员',
-		dataIndex: 'users',
+		title: '管理员(人数)',
+		dataIndex: 'accounts',
+		sorter: {
+			compare: (a, b) => a.accounts > b.accounts,
+			multiple: 1,
+		},
 		// 建议展示数字
 		// 弹出modal，展示该角色下所有的用户
-		render: (text, record) => <span>123</span>,
+		render: (accounts, record) => (
+			<Accounts accounts={accounts} record={record} />
+		),
 	},
 ];
 export default columns;

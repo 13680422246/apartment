@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import './index.scss'; // 全局css
+import './css/global/index.scss'; // 全局css
 import 'antd/dist/antd.css'; // antd css
 import Router from './router'; // 路由
 // redux

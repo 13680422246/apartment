@@ -1,11 +1,11 @@
 import React, { memo } from 'react';
-import { Tag } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
 import style from './index.module.scss';
 import {
 	useTags,
 	useRoomDispatch,
 } from '../../../../store/RoomReducer/dispatch';
+import { Tag } from '../../../../components';
 
 interface IPros {}
 const Tags: React.FC<IPros> = (props) => {
@@ -20,10 +20,7 @@ const Tags: React.FC<IPros> = (props) => {
 		return (
 			<span key={index} style={{ display: 'inline-block' }}>
 				<Tag
-					className={style.tag}
-					closable
-					onClose={(e) => {
-						e.preventDefault();
+					onClick={() => {
 						handleClose(tag.tag);
 					}}>
 					{tag.value}

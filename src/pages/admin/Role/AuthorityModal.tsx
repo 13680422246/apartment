@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useState } from 'react';
 import { FormModal, FormModalProps } from '../../../components';
 import useDispatch from '../../../components/EditableTableForm/store/dispatch';
-import { useRequest } from '../../../utils';
+import { useRequest } from '../../../js';
 import { Spin, Tree } from 'antd';
 
 interface IPros {

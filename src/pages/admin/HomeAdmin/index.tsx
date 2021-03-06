@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { Typography, Space } from 'antd';
 import style from './index.module.scss';
-import { useTitle } from '../../../utils';
+import { useTitle } from '../../../js';
 
 interface IPros {}
 const defaultProps = {};

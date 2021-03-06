@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { Room as RoomType } from '../../../components';
-import { useRequest } from '../../../utils';
+import { useRequest } from '../../../js';
 import { Result, Button } from 'antd';
 import style from './index.module.scss';
 

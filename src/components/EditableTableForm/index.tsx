@@ -1,6 +1,6 @@
-import React, { memo, useEffect, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo } from 'react';
 import { Button, Form, Space, Table } from 'antd';
-import { useRequest } from '../../utils';
+import { useRequest } from '../../js';
 import EditableCell from './render/EditableCell';
 import { Provider } from './store';
 import { useSelector } from './store';
@@ -10,6 +10,7 @@ import renderEdit from './render/renderEdit';
 import renderSearch from './render/renderSearch';
 import parseParams from './parseParams';
 import A from '../A';
+import { stat } from 'fs';
 
 export interface PageInfo {
 	hasNextPage: boolean;
@@ -58,11 +59,16 @@ const EditableTableForm: React.FC<IPros> = memo(
 		>(props.fetchUrl, {
 			onSuccess: ({ data }) => {
 				if (dispatch) {
+					// 取消编辑状态
+					dispatch.setEditingKey('');
+					// 设置分页数据
 					dispatch.setPagination({
 						current: data.pageNum,
 						pageSize: data.pageSize,
 						total: data.total,
 					});
+					// 处理请求数据
+					// 这里交给用户去处理，因为每个table处理数据的方式可能不一样
 					props.handleFetchData({
 						datasource: data.list,
 						emit: (datasource) => {
@@ -72,10 +78,6 @@ const EditableTableForm: React.FC<IPros> = memo(
 				}
 			},
 		});
-		useEffect(() => {
-			handleReset(); // 重置条件
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, []);
 
 		/**
 		 * 刷新页面 - 重新请求数据
@@ -94,30 +96,61 @@ const EditableTableForm: React.FC<IPros> = memo(
 		 * 重置条件 - 删除筛选、排序
 		 */
 		const handleReset = () => {
+			// 删除排序和筛选
+			dispatch.setFilterAndSorter([], []);
+			// 删除搜索内容
+			dispatch.setSearchText('');
 			run({
 				current: 1,
 				pageSize: props.defaultPageSize as number,
 			});
 		};
 
+		useEffect(() => {
+			handleReset(); // 重置条件
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, []);
+
 		/**
-		 * onChnage
+		 * onChange
 		 */
-		const handleChange = (pagination: any, filters: any, sorter: any) => {
-			console.info(`change table`);
-			if (dispatch) {
-				// 取消编辑状态
-				dispatch.setEditingKey('');
-				// 设置筛选和排序
-				dispatch.setFilterAndSorter(filters, sorter);
-				// 重新请求数据
-				// 注意: 将defaultPageSize恢复到默认的
+		useEffect(() => {
+			// run({
+			//     ...parseParams(state.pagination, statefilters, sorter),
+			//     pageSize: props.defaultPageSize as number,
+			// });
+			console.info('列', state.searchedColumn);
+			console.info('搜索文本', state.searchText);
+			if (state.searchText !== '') {
+				// 删除排序和筛选
+				dispatch.setFilterAndSorter([], []);
 				run({
-					...parseParams(pagination, filters, sorter),
+					current: 1,
 					pageSize: props.defaultPageSize as number,
+					filters: {
+						[state.searchedColumn]: state.searchText,
+					},
 				});
 			}
-		};
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [state.searchText, state.searchedColumn]);
+		const handleChange = useCallback(
+			(pagination: any, filters: any, sorter: any) => {
+				if (dispatch) {
+					// 取消编辑状态
+					dispatch.setEditingKey('');
+					// 设置筛选和排序
+					dispatch.setFilterAndSorter(filters, sorter);
+					// 重新请求数据
+					// 注意: 将defaultPageSize恢复到默认的
+					run({
+						...parseParams(pagination, filters, sorter),
+						pageSize: props.defaultPageSize as number,
+					});
+				}
+			},
+			[dispatch, props.defaultPageSize, run]
+		);
 
 		/**
 		 * 合并列对象

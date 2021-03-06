@@ -1,0 +1,51 @@
+//#region common css
+.space-between {
+	display: flex;
+	justify-content: space-between;
+}
+// 文本溢出，省略号显示
+.ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.secondly {
+	color: rgba(0, 0, 0, 0.45);
+}
+//#endregion
+
+.friend {
+	width: 280px;
+	margin: 0 auto;
+	padding: 10px 15px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	box-shadow: 0 1px 0 rgba(0, 0, 1, 0.1);
+	background-color: white;
+}
+.active {
+	background-color: rgba(128, 128, 128, 0.2);
+	opacity: 0.8;
+}
+.header {
+	margin-bottom: 10px;
+	@extend .space-between;
+}
+.username {
+	width: 200px;
+	font-weight: bold;
+	overflow: hidden;
+	@extend .ellipsis;
+}
+.footer {
+	@extend .space-between;
+}
+.content {
+	width: 200px;
+	@extend .ellipsis;
+	@extend .secondly;
+}
+.time {
+	font-size: 12px;
+	@extend .secondly;
+}

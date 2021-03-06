@@ -6,7 +6,7 @@ import {
 	useLoginGoBack,
 	useUserDispatch,
 } from '../../store/userRedcer/dispatch';
-import { useRequest, useTitle } from '../../utils';
+import { useRequest, useTitle } from '../../js';
 
 interface PostData {
 	username: string;

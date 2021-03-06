@@ -7,7 +7,7 @@ import useDispatch from '../store/dispatch';
 /**
  * 搜索输入框
  */
-export default (function (props: any) {
+const Search: React.FC<any> = (props) => {
 	const state = useSelector((store) => store.state);
 	const dispatch = useDispatch();
 	const {
@@ -47,7 +47,7 @@ export default (function (props: any) {
 				ref={(node) => {
 					inputRef.current = node;
 				}}
-				placeholder={`Search ${dataIndex}`}
+				placeholder={`搜索 ${dataIndex}`}
 				value={selectedKeys[0]}
 				onChange={(e) => {
 					setSelectedKeys(e.target.value ? [e.target.value] : []);
@@ -73,4 +73,5 @@ export default (function (props: any) {
 			</Space>
 		</div>
 	);
-});
+};
+export default Search;

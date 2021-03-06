@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { useRequest, useScrollLoader } from '../../../../utils';
+import { useRequest, useScrollLoader } from '../../../../js';
 import { RoomCard, Room } from '../../../../components';
 import { useRoomStore } from '../../../../store/RoomReducer/dispatch';
 import { Spin, Empty, BackTop } from 'antd';

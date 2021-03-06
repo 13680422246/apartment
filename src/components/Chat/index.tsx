@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useRef } from 'react';
+import React, { memo, useCallback, useRef, useImperativeHandle } from 'react';
 import { List, Spin, Typography, Form, Input, Button } from 'antd';
 import useChat from './useChat';
 import style from './index.module.scss';
@@ -23,9 +23,16 @@ const defaultProps = {
 		callback: () => {},
 	},
 };
-const Chat: React.FC<IPros> = (props) => {
+export interface Handle {
+	appendChat: (content: string, isAdmin?: boolean) => void;
+}
+const Chat = React.forwardRef<Handle, IPros>((props, ref) => {
 	const [form] = Form.useForm();
 	const scroll = useRef<HTMLDivElement>(null);
+
+	/**
+	 * 加载聊天信息
+	 */
 	const {
 		loadMoreLoading,
 		hasNextPage,
@@ -40,6 +47,13 @@ const Chat: React.FC<IPros> = (props) => {
 	);
 
 	/**
+	 * 暴露给父组件的方法
+	 */
+	useImperativeHandle(ref, () => ({
+		appendChat,
+	}));
+
+	/**
 	 * 点击发送按钮
 	 */
 	const handleClick = useCallback(() => {
@@ -48,13 +62,11 @@ const Chat: React.FC<IPros> = (props) => {
 			if (props.buttonOptions && props.buttonOptions.callback) {
 				props.buttonOptions.callback(rows.content);
 			}
-			// 追加内容到聊天列表
-			appendChat(rows.content);
 			form.resetFields(); // 重置表单
 		});
-	}, [appendChat, form, props.buttonOptions]);
+	}, [form, props.buttonOptions]);
 
-	const isShow = chats.length === 0;
+	const isShow = chats.length === 0 && loadMoreLoading;
 	return (
 		<div className={style.container}>
 			<div style={props.style} className={style.header} ref={scroll}>
@@ -89,6 +101,23 @@ const Chat: React.FC<IPros> = (props) => {
 												level={5}>
 												客服
 											</Typography.Title>
+											<div
+												style={
+													props.isAdmin
+														? {
+																textAlign:
+																	'right',
+														  }
+														: {
+																textAlign:
+																	'left',
+														  }
+												}
+												className={style.time}>
+												{moment(item.createtime).format(
+													'YYYY-MM-DD HH:mm:ss'
+												)}
+											</div>
 											<div className={style.content}>
 												<Typography.Text type='secondary'>
 													{item.content}
@@ -107,15 +136,25 @@ const Chat: React.FC<IPros> = (props) => {
 											<Typography.Title
 												className={style.title}
 												level={5}>
-												{props.username}-
-												<span className={style.time}>
-													{moment(
-														item.createtime
-													).format(
-														'YYYY-MM-DD HH:mm:ss'
-													)}
-												</span>
+												{props.username}
 											</Typography.Title>
+											<div
+												style={
+													props.isAdmin
+														? {
+																textAlign:
+																	'left',
+														  }
+														: {
+																textAlign:
+																	'right',
+														  }
+												}
+												className={style.time}>
+												{moment(item.createtime).format(
+													'YYYY-MM-DD HH:mm:ss'
+												)}
+											</div>
 											<div className={style.content}>
 												<Typography.Text type='secondary'>
 													{item.content}
@@ -163,7 +202,7 @@ const Chat: React.FC<IPros> = (props) => {
 			)}
 		</div>
 	);
-};
+});
 Chat.defaultProps = defaultProps;
 export default memo(Chat, (prevProps, nextProps) => {
 	if (prevProps.userid === nextProps.userid) return true;

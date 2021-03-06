@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Row, Col, Divider } from 'antd';
+import { Row, Col, Divider, Menu, Dropdown } from 'antd';
 import { NavLink } from 'react-router-dom';
 import {
 	useUserStore,
@@ -7,6 +7,12 @@ import {
 } from '../../../store/userRedcer/dispatch';
 import Logo from './Logo';
 import Chat from '../Chat';
+import { A } from '../../../components';
+import { DownOutlined } from '@ant-design/icons';
+import { classNames } from '../../../js';
+import style from './index.module.scss';
+
+const cls = classNames.bind(style);
 
 interface Ipros {}
 
@@ -20,6 +26,26 @@ function MyDivider() {
 		/>
 	);
 }
+
+/**
+ * 下拉菜单
+ */
+const menu = (
+	<Menu>
+		<Menu.Item>
+			<NavLink to='/update-pwd'>修改密码</NavLink>
+		</Menu.Item>
+		<Menu.Item>
+			<NavLink to='/user-info'>完善用户信息</NavLink>
+		</Menu.Item>
+		<Menu.Item>
+			<NavLink to='/subscribe'>我的预约</NavLink>
+		</Menu.Item>
+		<Menu.Item>
+			<NavLink to='/contract'>我的合同</NavLink>
+		</Menu.Item>
+	</Menu>
+);
 
 const Header: React.FC<Ipros> = (props) => {
 	const store = useUserStore();
@@ -48,7 +74,14 @@ const Header: React.FC<Ipros> = (props) => {
 					<div>
 						<span>{store.username}</span>
 						<MyDivider />
-						<NavLink to='/usercenter'>用户中心</NavLink>
+						<Dropdown overlay={menu}>
+							<span>
+								<A>
+									用户中心
+									<DownOutlined className={cls('arrow')} />
+								</A>
+							</span>
+						</Dropdown>
 						<MyDivider />
 						<NavLink
 							to=''

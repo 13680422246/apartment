@@ -17,10 +17,14 @@ function useDispatch() {
 			return state.editingKey !== '';
 		},
 		// 设置数据源
-		setData(datasource: any[]) {
+		setData(datasource: any[] | ((datasource: any[]) => any[])) {
+			let ds = datasource;
+			if (typeof datasource === 'function') {
+				ds = datasource(state.data);
+			}
 			dispatch({
 				type: 'data',
-				args: [datasource],
+				args: [ds],
 			});
 		},
 		// 设置editingKey

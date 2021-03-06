@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { useTitle } from '../../../utils';
+import { useTitle } from '../../../js';
 import { Image, Divider, Tag, Typography, Spin } from 'antd';
 import style from './index.module.scss';
 import { baseURL } from '../../../config';
@@ -65,18 +65,6 @@ const RoomComponent: React.FC<IPros> = (props) => {
 								{tag}
 							</Tag>
 						))}
-					</div>
-					<Divider />
-					<div>
-						<h3>户型特色</h3>
-						<p>
-							此房间小巧精致，价格低廉，温馨的风格设计让房间又多了一份情调
-						</p>
-					</div>
-					<Divider />
-					<div>
-						<h3>房源简介</h3>
-						<div>icons</div>
 					</div>
 				</>
 			)}

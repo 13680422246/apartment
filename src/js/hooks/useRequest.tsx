@@ -1,8 +1,8 @@
 import Axios from 'axios';
-import { baseURL } from '../config';
+import { baseURL } from '../../config';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { store } from '../store';
-import { Hint, HintOptions } from '../components';
+import { store } from '../../store';
+import { Hint, HintOptions } from '../../components';
 import Qs from 'qs';
 
 const proxy = Axios.create({
@@ -16,7 +16,8 @@ const proxy = Axios.create({
 	transformRequest: [
 		function (data) {
 			// 如果token存在的话，带上token
-			const token = store.getState().user.token;
+			const user = store.getState().user;
+			const token = (user && user.token) || '';
 			if (token) {
 				data['token'] = token;
 			}
@@ -139,6 +140,9 @@ function useRequest<ResDataType, ParamsType>(
 							values,
 						};
 					}
+					return {
+						running: false,
+					};
 				})
 				.catch((err: Error) => {
 					/**

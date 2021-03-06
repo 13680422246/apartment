@@ -3,7 +3,7 @@ import { FormModal, FormModalProps } from '../../../components';
 import { Button, Form, Input } from 'antd';
 import { useSelector } from '../../../components/EditableTableForm/store';
 import useDispatch from '../../../components/EditableTableForm/store/dispatch';
-import { useRequest } from '../../../utils';
+import { useRequest } from '../../../js';
 
 interface IPros {
 	url: string; // 添加提交的地方
