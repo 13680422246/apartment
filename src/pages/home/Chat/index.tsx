@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useRef } from 'react';
-import { Modal, Tooltip, Badge } from 'antd';
+import { Modal, Tooltip, Badge, Grid } from 'antd';
 import {
 	Chat as ChatComponent,
 	A,
@@ -11,12 +11,15 @@ import { useUserStore } from '../../../store/userRedcer/dispatch';
 import style from './index.module.scss';
 import useUnread from './useUnread';
 
+const { useBreakpoint } = Grid;
+
 interface IPros {}
 const defaultProps = {};
 const Chat: React.FC<IPros> = (props) => {
 	const userStore = useUserStore();
 	const chatRef = useRef<IChatImperativeHandle>(null);
 	const isRole = isIntNumber(userStore.roleid); // 是否为管理员
+    const screen = useBreakpoint();
 
 	// 控制modal的开关
 	const { visible, toggle } = useToggle();
@@ -67,8 +70,7 @@ const Chat: React.FC<IPros> = (props) => {
 	 * 打开modal
 	 */
 	const handleClick = useCallback(
-		(e: React.UIEvent) => {
-			e.preventDefault();
+		() => {
 			clearUnread();
 			toggle();
 		},
@@ -97,17 +99,19 @@ const Chat: React.FC<IPros> = (props) => {
 	// onClick={openModal}
 	return (
 		<>
-			<div className={style.badge} onClick={handleClick}>
+			<div className={style.badge} >
 				<Badge count={unread}>
-					<A>联系客服</A>
+					<A handleClick={handleClick}>联系客服</A>
 				</Badge>
 			</div>
 			<Modal title='客服' visible={visible} footer={[]} onCancel={toggle}>
 				<ChatComponent
 					ref={chatRef}
-					style={{
-						maxHeight: '500px',
-					}}
+					style={screen.xs ? {
+						maxHeight: '300px',
+					} : {
+                        maxHeight: '500px',
+                    }}
 					isAdmin={false}
 					userid={3}
 					username={userStore.username}
