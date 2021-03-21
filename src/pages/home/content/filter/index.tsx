@@ -11,19 +11,6 @@ import style from './style.module.scss';
 import useTabKey from './useTabKey';
 const { Panel } = Collapse;
 
-const collapse: React.CSSProperties = {
-	display: 'flex',
-	justifyContent: 'space-around',
-	backgroundColor: 'white',
-	position: 'fixed',
-	left: 0,
-	right: 0,
-	top: '60px',
-	zIndex: 200,
-	boxShadow: '0 1px 0 rgb(0 0 0 / 10%)',
-};
-// box-shadow: 0 1px 0 rgb(0 0 0 / 10%);
-
 const Filter: React.FC<{}> = (props) => {
 	const store = useRoomStore();
 	const dispatch = useRoomDispatch();
@@ -44,6 +31,25 @@ const Filter: React.FC<{}> = (props) => {
 		close(); // close tab
 		modalRef.current?.closeModal(); // close modal
 	};
+
+    const collapse = React.useMemo<React.CSSProperties>(() => {
+        const common: React.CSSProperties = {
+            display: 'flex',
+            justifyContent: 'space-around',
+            backgroundColor: 'white',
+            position: 'fixed',
+            left: 0,
+            right: 0,
+            top: '60px',
+            zIndex: 200,
+            boxShadow: '0 1px 0 rgb(0 0 0 / 10%)',
+        };
+        console.info(`activeKey: ${activeKey}`, !activeKey);
+        !activeKey && (
+            common.overflowX = 'auto'
+        );
+        return common;
+    }, [activeKey]);
 
 	const handlePrice = (
 		title: React.ReactNode,
@@ -87,7 +93,7 @@ const Filter: React.FC<{}> = (props) => {
 						<span
 							className={
 								store.price.title === '租金'
-									? ''
+									? style.unTextSelect
 									: style.textSelect
 							}>
 							{store.price.title}
@@ -108,7 +114,7 @@ const Filter: React.FC<{}> = (props) => {
 						<span
 							className={
 								store.area.title === '面积'
-									? ''
+									? style.unTextSelect
 									: style.textSelect
 							}>
 							{store.area.title}
@@ -133,7 +139,7 @@ const Filter: React.FC<{}> = (props) => {
 						<span
 							className={
 								store.dir.title === '朝向'
-									? ''
+									? style.unTextSelect
 									: style.textSelect
 							}>
 							{store.dir.title}

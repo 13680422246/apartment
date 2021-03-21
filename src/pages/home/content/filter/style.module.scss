@@ -8,9 +8,25 @@
 	background-color: white;
 	overflow-y: auto;
 }
+
+// 单行文本显示
+%one-line {
+    display: block;
+    max-width: 100px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+// 还没选择之前的文本样式
+.unTextSelect {
+    @extend %one-line;
+}
 // 选择文本样式
 .textSelect {
 	color: #ff552e;
 	font-weight: bolder;
 	font-size: 1.2rem;
+    // 单行文本显示
+    @extend %one-line;
 }
