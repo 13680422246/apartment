@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IStore } from '..';
 import { ACTION_SET_USER } from './ActionTypes';
-import { useHistory } from 'react-router-dom';
+import { useHistory,useLocation } from 'react-router-dom';
 
 export const useUserStore = () => {
 	return useSelector((store: IStore) => store.user);
@@ -35,6 +35,8 @@ export const useNotAdminThenGoBack = () => {
 };
 export const useUserDispatch = () => {
 	const dispatch = useDispatch();
+    const location = useLocation();
+	const history = useHistory();
 	return {
 		// 实现用户登录
 		login(user: { token: string; roleid: string; username: string }) {
@@ -55,6 +57,9 @@ export const useUserDispatch = () => {
 					},
 				],
 			});
+            if(location.pathname.indexOf('/room') === -1){
+                history.push('/');
+            }
 		},
 	};
 };
