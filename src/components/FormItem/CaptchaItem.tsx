@@ -26,7 +26,9 @@ const CaptchaItem: React.FC<IPros> = (props) => {
 	return (
 		<Form.Item name={props.name} rules={props.rules}>
 			<Row>
-				<Col span={12}>
+				<Col sm={{span: 12}} xs={{
+                    span: 24
+                }}>
 					<Image
 						width={140}
 						height={40}
@@ -46,7 +48,9 @@ const CaptchaItem: React.FC<IPros> = (props) => {
 						}
 					/>
 				</Col>
-				<Col span={12}>
+				<Col sm={{span: 12}} xs={{
+                    span: 24
+                }}>
 					<Input
 						style={{
 							height: '40px',

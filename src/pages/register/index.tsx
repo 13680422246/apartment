@@ -54,6 +54,7 @@ const Login: React.FC = () => {
 		<Row
 			justify='center'
 			style={{
+                minWidth: '250px',
 				position: 'absolute',
 				top: '20%',
 				left: '50%',
