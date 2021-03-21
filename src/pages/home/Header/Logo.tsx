@@ -1,7 +1,6 @@
 import React, { memo, useState, useEffect } from 'react';
 import { Grid } from 'antd';
-import { useHistory, useLocation } from 'react-router-dom';
-import { LeftOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
 const { useBreakpoint } = Grid;
 
 const TextLogo: React.FC<{
@@ -18,7 +17,7 @@ const IconLogo: React.FC<{
 }> = (props) => {
 	const history = useHistory();
 	const handleClick = () => {
-		history.goBack();
+        history.push('/');
 	};
 	return <span onClick={handleClick}>{props.icon}</span>;
 };
