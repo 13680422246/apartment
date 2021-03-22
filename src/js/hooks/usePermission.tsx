@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Route, useLocation } from 'react-router-dom';
 import { useRequest } from '..';
 import routers from '../../config/routers';
+import { perfix } from '../../config';
 
 export interface ISideItem {
 	title: string;
@@ -47,20 +48,21 @@ function usePermission() {
 			const side: ISideItem[] = [];
 			const components: React.ReactNode[] = [];
 			for (const permission of data) {
-				const temp = routers[permission.url];
+                const url = permission.url.slice(perfix.length);
+				const temp = routers[url];
 				if (temp === undefined) continue; // 这里temp可能是undefined，但是编辑器没有提示，奇怪
 				if (!!temp.icon) {
 					side.push({
 						title: permission.name,
-						url: permission.url,
+						url: url,
 						icon: temp.icon,
 					});
 				}
 				if (!!temp.component) {
 					components.push(
 						<Route
-							key={permission.url}
-							path={permission.url}
+							key={url}
+							path={url}
 							component={temp.component}
 							exact
 						/>

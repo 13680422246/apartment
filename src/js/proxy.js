@@ -2,9 +2,7 @@ import Axios from 'axios';
 import Qs from 'qs';
 import { store } from '../store';
 import Hint from '../components/Hint';
-
-// 基础配置
-const baseURL = 'http://localhost:8080';
+import { baseURL } from '../config';
 
 // 构建Axios代理
 const proxy = Axios.create({
