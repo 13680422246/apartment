@@ -24,6 +24,9 @@ const Chat: React.FC<IPros> = (props) => {
 	// 控制modal的开关
 	const { visible, toggle } = useToggle();
 
+    const temp = React.useRef<boolean>(visible);
+    React.useEffect(() => { temp.current = visible; }, [visible])
+
 	/**
 	 * 管理unread未读信息
 	 */
@@ -34,20 +37,21 @@ const Chat: React.FC<IPros> = (props) => {
 	 */
 	const { disable, sendContent: websocketSendContent } = useWebSocket(
 		`${websocketBaseURL}/${userStore.token}`,
-		(data) => {
-			// 接收到的聊天信息
-			if (typeof data === 'string') {
-				// 如果来哦天窗口已经打开 ， 追加到聊天信息
-				if (visible && chatRef.current) {
-					chatRef.current.appendChat(data);
-				}
-				// 聊天窗口是关闭的状态 ， 更新未读信息
-				else {
-					// 设置未读信息
-					increment();
-				}
-			}
-		}
+		(data: string) => {
+            // 接收到的聊天信息
+            if (typeof data === 'string') {
+                temp.current === false && increment();
+                chatRef.current && chatRef.current.appendChat(data);
+                // if (temp.current && chatRef.current) {
+                //     chatRef.current.appendChat(data);
+                // }
+                // // 聊天窗口是关闭的状态 ， 更新未读信息
+                // else {
+                //     // 设置未读信息
+                //     increment();
+                // }
+            }
+        }
 	);
 
 	/**
