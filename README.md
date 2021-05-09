@@ -1,46 +1,70 @@
-# Getting Started with Create React App
+# 酒店式公寓-前端
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 技术栈
 
-## Available Scripts
+> React+redux+antd+echarts+axios+scss+typescript
 
-In the project directory, you can run:
 
-### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 页面展示
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 首页
 
-### `yarn test`
+![](.\docs\首页.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 登录、注册
 
-### `yarn build`
+![登录](.\docs\登录.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![注册](.\docs\注册.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
+### 权限控制
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+![](.\docs\权限控制.png)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 角色管理
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+![](.\docs\角色管理.png)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### 聊天功能
 
-## Learn More
+房客使用的：
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![](.\docs\咨询客服.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+后台管理员使用的：
+
+![](.\docs\客服服务.png)
+
+### 经营分析
+
+![](.\docs\经营分析.png)
+
+![](.\docs\经营分析2.png)
+
+### 公寓管理
+
+![](.\docs\公寓管理.png)
+
+### 维修管理
+
+![](.\docs\维修管理.png)
+
+### 预约管理
+
+![](.\docs\预约管理.png)
+
+### 合同管理
+
+![](.\docs\合同管理.png)
+
+### 员工管理
+
+![](.\docs\员工管理.png)
+
+### 房客管理
+
+![](.\docs\房客管理.png)
+
